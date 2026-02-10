@@ -30,4 +30,10 @@ class TasksViewModel @Inject constructor(private val repository: TaskRepository)
             repository.deleteTask(taskId)
         }
     }
+
+    fun completeTask(taskId: Int, isCompleted: Boolean) {
+        viewModelScope.launch {
+            repository.completeTask(taskId, isCompleted)
+        }
+    }
 }

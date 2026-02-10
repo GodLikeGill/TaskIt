@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">TaskIt</string>
     <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="add_task_title">Add your task/reminder title</string>
+    <string name="description">description</string>
 </resources>
