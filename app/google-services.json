@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "15780260723",
+    "project_id": "taskit-dfbc9",
+    "storage_bucket": "taskit-dfbc9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:15780260723:android:34bb9197e45db357e27306",
+        "android_client_info": {
+          "package_name": "com.godlike.taskit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe4DGFK6RZKr8UBmi1Twny5nOx5EiqyEg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

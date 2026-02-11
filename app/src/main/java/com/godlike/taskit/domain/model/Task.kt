@@ -1,12 +1,12 @@
-package com.godlike.taskit.data
+package com.godlike.taskit.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.google.firebase.firestore.PropertyName
+import java.util.UUID
 
-@Entity(tableName = "task")
 data class Task (
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: String = UUID.randomUUID().toString(),
     var title: String = "",
     var description: String = "",
     var isCompleted: Boolean = false,

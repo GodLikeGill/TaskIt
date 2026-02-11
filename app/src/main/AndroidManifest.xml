@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskIt" >
         <activity
-            android:name=".MainActivity"
+            android:name=".TaskItActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.TaskIt" >

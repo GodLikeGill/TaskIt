@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.godlike.taskit.tasks.TasksScreen
+import com.godlike.taskit.presentation.tasks.TasksScreen
 
 @Composable
 fun TaskItNavGraph(
