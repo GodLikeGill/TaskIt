@@ -18,34 +18,35 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.godlike.taskit.R
 import com.godlike.taskit.domain.model.Task
+import com.godlike.taskit.ui.theme.InterFontFamily
+import com.godlike.taskit.ui.theme.darkGray
+import com.godlike.taskit.ui.theme.lightGray
+import com.godlike.taskit.ui.theme.taskRed
+import com.godlike.taskit.ui.theme.white
 
 @Composable
 fun ModalSheetContent(
-    viewModel: TasksViewModel,
-    onClose: () -> Unit,
+    onClose: (Task) -> Unit,
 ) {
     var taskTitle by remember { mutableStateOf("") }
     var taskDescription by remember { mutableStateOf("") }
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(4.dp)
+            .padding(8.dp)
     ) {
         Text(
             modifier = Modifier.fillMaxWidth(),
             text = stringResource(R.string.add_task),
-            color = colorResource(R.color.white_less),
+            color = white,
             fontSize = 32.sp,
             textAlign = TextAlign.Center,
         )
@@ -53,11 +54,16 @@ fun ModalSheetContent(
             value = taskTitle,
             onValueChange = { taskTitle = it },
             modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(fontSize = 24.sp, color = colorResource(R.color.white_less)),
+            textStyle = TextStyle(
+                fontSize = 24.sp,
+                color = lightGray,
+                fontFamily = InterFontFamily
+            ),
             decorationBox = { innerTextField ->
                 if (taskTitle.isEmpty()) Text(
                     text = stringResource(R.string.add_task_title),
-                    color = Color.Gray,
+                    fontFamily = InterFontFamily,
+                    color = darkGray,
                     fontSize = 20.sp
                 )
                 innerTextField()
@@ -66,11 +72,16 @@ fun ModalSheetContent(
             value = taskDescription,
             onValueChange = { taskDescription = it },
             modifier = Modifier.fillMaxWidth(),
-            textStyle = TextStyle(fontSize = 20.sp, color = colorResource(R.color.white_less)),
+            textStyle = TextStyle(
+                fontSize = 20.sp,
+                color = lightGray,
+                fontFamily = InterFontFamily
+            ),
             decorationBox = { innerTextField ->
                 if (taskDescription.isEmpty()) Text(
                     text = stringResource(R.string.description),
-                    color = Color.Gray,
+                    fontFamily = InterFontFamily,
+                    color = darkGray,
                     fontSize = 16.sp
                 )
                 innerTextField()
@@ -81,12 +92,12 @@ fun ModalSheetContent(
         ) {
             FilledIconButton(
                 onClick = {
-                    onClose()
-                    viewModel.onAddTask(Task(title = taskTitle, description = taskDescription))
+                    if (taskTitle.isNotEmpty() && taskDescription.isNotEmpty())
+                        onClose(Task(title = taskTitle, description = taskDescription))
                 },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = Color.Gray,
-                    contentColor = Color.Black,
+                    containerColor = taskRed,
+                    contentColor = white,
                 )
             ) {
                 Icon(
@@ -101,5 +112,5 @@ fun ModalSheetContent(
 @Preview
 @Composable
 fun PreviewModalSheetContent() {
-    ModalSheetContent(viewModel = viewModel(), onClose = {})
+    ModalSheetContent(onClose = {})
 }

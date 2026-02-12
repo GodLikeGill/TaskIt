@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="background">#FF1F1F1F</color>
     <color name="white_less">#f4f4f4</color>
+    <color name="task_red">#d14549</color>
 </resources>
