@@ -1,7 +1,20 @@
 <resources>
     <string name="app_name">TaskIt</string>
+    <string name="app_slogan">Note It. Plan It. Get It Done.</string>
     <string name="tasks">Tasks</string>
     <string name="add_task">Add Task</string>
     <string name="add_task_title">Add your task/reminder title</string>
     <string name="description">description</string>
+    <string name="sign_in">Sign In</string>
+    <string name="log_in">Log In</string>
+    <string name="sign_in_with_email">Sign in with Email</string>
+    <string name="continue_with_google">Continue with Google</string>
+    <string name="continue_with_facebook">Continue with Facebook</string>
+    <string name="new_user">New User? Sign Up</string>
+    <string name="login_description">Add your email and password.</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="your_email">Your Email</string>
+    <string name="your_password">Your Password</string>
+    <string name="forgot_your_password">Forgot your password?</string>
 </resources>

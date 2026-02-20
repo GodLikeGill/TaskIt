@@ -31,7 +31,7 @@ import com.godlike.taskit.R
 import com.godlike.taskit.domain.model.Task
 import com.godlike.taskit.presentation.components.TaskItem
 import com.godlike.taskit.ui.theme.black
-import com.godlike.taskit.ui.theme.taskRed
+import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
 import com.godlike.taskit.util.TasksTopAppBar
 
@@ -66,8 +66,8 @@ fun TasksScreenContent(
             FloatingActionButton(
                 onClick = { showBottomSheet = true },
                 shape = CircleShape,
-                containerColor = taskRed,
-                contentColor = white
+                contentColor = white,
+                containerColor = taskItRed
             ) {
                 Icon(
                     imageVector = Icons.Filled.Add, contentDescription = ""

@@ -29,7 +29,7 @@ import com.godlike.taskit.domain.model.Task
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.darkGray
 import com.godlike.taskit.ui.theme.lightGray
-import com.godlike.taskit.ui.theme.taskRed
+import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
 
 @Composable
@@ -96,7 +96,7 @@ fun ModalSheetContent(
                         onClose(Task(title = taskTitle, description = taskDescription))
                 },
                 colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = taskRed,
+                    containerColor = taskItRed,
                     contentColor = white,
                 )
             ) {

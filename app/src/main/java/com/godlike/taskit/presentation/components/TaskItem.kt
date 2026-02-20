@@ -35,7 +35,7 @@ import androidx.core.graphics.ColorUtils
 import com.godlike.taskit.domain.model.Task
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.black
-import com.godlike.taskit.ui.theme.taskRed
+import com.godlike.taskit.ui.theme.taskItRed
 
 @Composable
 fun TaskItem(
@@ -59,13 +59,13 @@ fun TaskItem(
             }
             clipPath(clipPath) {
                 drawRoundRect(
-                    color = taskRed,
+                    color = taskItRed,
                     size = size,
                     cornerRadius = CornerRadius(cornerRadius.toPx())
                 )
                 drawRoundRect(
                     color = Color(
-                        ColorUtils.blendARGB(taskRed.toArgb(), 0x000000, 0.2f)
+                        ColorUtils.blendARGB(taskItRed.toArgb(), 0x000000, 0.2f)
                     ),
                     topLeft = Offset(size.width - cutCornerSize.toPx(), -100f),
                     size = Size(cutCornerSize.toPx() + 100f, cutCornerSize.toPx() + 100f),
