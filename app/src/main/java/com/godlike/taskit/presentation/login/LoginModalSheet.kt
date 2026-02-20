@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.godlike.taskit.presentation.login
 
 import androidx.compose.foundation.background
@@ -15,18 +17,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.SheetState
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -42,15 +51,32 @@ import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.textFieldBackground
 import com.godlike.taskit.ui.theme.white
 
+
 @Composable
-fun LoginModalSheet() {
+fun LoginModalSheet(
+    sheetState: SheetState,
+    onClose: () -> Unit,
+) {
+
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(sheetState.currentValue) {
+        if (sheetState.currentValue == SheetValue.Expanded) {
+            focusRequester.requestFocus()
+            keyboardController?.show()
+        }
+    }
+
     LoginModalSheetContent(
-        onClose = {}
+        focusRequester = focusRequester,
+        onClose = onClose
     )
 }
 
 @Composable
 fun LoginModalSheetContent(
+    focusRequester: FocusRequester,
     onClose: () -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -58,7 +84,7 @@ fun LoginModalSheetContent(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .background(color = modalSheetBackground)
             .padding(16.dp)
     ) {
@@ -116,15 +142,16 @@ fun LoginModalSheetContent(
                 )
                 TextField(
                     value = email,
-                    onValueChange = {},
+                    onValueChange = { email = it },
                     label = { Text(text = stringResource(id = R.string.email)) },
                     shape = RoundedCornerShape(32.dp),
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
                     colors = TextFieldDefaults.colors(
                         unfocusedContainerColor = textFieldBackground,
                         focusedContainerColor = textFieldBackground,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent
                     ),
                 )
             }
@@ -138,7 +165,7 @@ fun LoginModalSheetContent(
                 )
                 TextField(
                     value = password,
-                    onValueChange = {},
+                    onValueChange = { password = it },
                     label = { Text(text = stringResource(id = R.string.password)) },
                     shape = RoundedCornerShape(32.dp),
                     modifier = Modifier.fillMaxWidth(),
@@ -147,6 +174,7 @@ fun LoginModalSheetContent(
                         focusedContainerColor = textFieldBackground,
                         unfocusedIndicatorColor = Color.Transparent,
                         disabledIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent
                     ),
                 )
             }
@@ -182,8 +210,12 @@ fun LoginModalSheetContent(
     }
 }
 
+/*
 @Preview
 @Composable
 fun PreviewLoginModalSheetContent() {
-    LoginModalSheetContent(onClose = {})
-}
+    LoginModalSheetContent(
+        focusRequester = FocusRequester(null),
+        onClose = {},
+    )
+}*/

@@ -7,7 +7,7 @@
     <string name="description">description</string>
     <string name="sign_in">Sign In</string>
     <string name="log_in">Log In</string>
-    <string name="sign_in_with_email">Sign in with Email</string>
+    <string name="continue_with_email">Sign in with Email</string>
     <string name="continue_with_google">Continue with Google</string>
     <string name="continue_with_facebook">Continue with Facebook</string>
     <string name="new_user">New User? Sign Up</string>
@@ -17,4 +17,6 @@
     <string name="your_email">Your Email</string>
     <string name="your_password">Your Password</string>
     <string name="forgot_your_password">Forgot your password?</string>
+    <string name="log_in_with_email">Log in with Email</string>
+    <string name="sign_up_with_email">Sign up with Email</string>
 </resources>

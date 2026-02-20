@@ -1,4 +1,4 @@
-package com.godlike.taskit.domain.usecase
+package com.godlike.taskit.domain.usecase.task
 
 import com.godlike.taskit.data.repository.TaskRepository
 import javax.inject.Inject

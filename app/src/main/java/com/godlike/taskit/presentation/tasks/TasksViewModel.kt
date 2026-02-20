@@ -3,10 +3,10 @@ package com.godlike.taskit.presentation.tasks
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.godlike.taskit.domain.model.Task
-import com.godlike.taskit.domain.usecase.AddTaskUseCase
-import com.godlike.taskit.domain.usecase.CompleteTaskUseCase
-import com.godlike.taskit.domain.usecase.DeleteTaskUseCase
-import com.godlike.taskit.domain.usecase.GetTasksUseCase
+import com.godlike.taskit.domain.usecase.task.AddTaskUseCase
+import com.godlike.taskit.domain.usecase.task.CompleteTaskUseCase
+import com.godlike.taskit.domain.usecase.task.DeleteTaskUseCase
+import com.godlike.taskit.domain.usecase.task.GetTasksUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
