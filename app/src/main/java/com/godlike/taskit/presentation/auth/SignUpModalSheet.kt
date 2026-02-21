@@ -1,30 +1,18 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
-package com.godlike.taskit.presentation.login
+package com.godlike.taskit.presentation.auth
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -34,7 +22,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -44,20 +31,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.godlike.taskit.R
+import com.godlike.taskit.presentation.components.AuthTextField
+import com.godlike.taskit.presentation.components.CloseButton
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.darkGray
 import com.godlike.taskit.ui.theme.modalSheetBackground
 import com.godlike.taskit.ui.theme.taskItRed
-import com.godlike.taskit.ui.theme.textFieldBackground
 import com.godlike.taskit.ui.theme.white
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginModalSheet(
+fun SignUpModalSheet(
     sheetState: SheetState,
     onClose: () -> Unit,
 ) {
-
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -68,17 +56,19 @@ fun LoginModalSheet(
         }
     }
 
-    LoginModalSheetContent(
+    SignUpModalSheetContent(
         focusRequester = focusRequester,
         onClose = onClose
     )
 }
 
 @Composable
-fun LoginModalSheetContent(
+fun SignUpModalSheetContent(
     focusRequester: FocusRequester,
     onClose: () -> Unit
 ) {
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
@@ -88,26 +78,8 @@ fun LoginModalSheetContent(
             .background(color = modalSheetBackground)
             .padding(16.dp)
     ) {
-        IconButton(
-            onClick = onClose,
-            modifier = Modifier
-                .size(48.dp)
-                .border(
-                    width = 1.dp,
-                    color = white.copy(alpha = 0.1f),
-                    shape = CircleShape
-                )
-                .background(
-                    color = white.copy(alpha = 0.05f),
-                    shape = CircleShape
-                )
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = "Close",
-                tint = white
-            )
-        }
+        CloseButton { onClose }
+
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -115,7 +87,7 @@ fun LoginModalSheetContent(
             verticalArrangement = Arrangement.spacedBy(4.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.log_in),
+                text = stringResource(id = R.string.sign_up),
                 color = white,
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
@@ -129,55 +101,41 @@ fun LoginModalSheetContent(
             )
         }
         Column(
-            modifier = Modifier.padding(vertical = 32.dp),
-            verticalArrangement = Arrangement.spacedBy(32.dp),
+            modifier = Modifier.padding(vertical = 24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.your_email),
-                    fontSize = 14.sp,
-                    color = darkGray,
-                    fontFamily = InterFontFamily,
-                    modifier = Modifier.padding(start = 14.dp, bottom = 4.dp)
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                AuthTextField(
+                    value = firstName,
+                    title = stringResource(R.string.your_first_name),
+                    label = stringResource(R.string.first_name),
+                    onValueChange = { firstName = it },
+                    modifier = Modifier.focusRequester(focusRequester),
+                    columnModifier = Modifier.weight(1f)
                 )
-                TextField(
-                    value = email,
-                    onValueChange = { email = it },
-                    label = { Text(text = stringResource(id = R.string.email)) },
-                    shape = RoundedCornerShape(32.dp),
-                    modifier = Modifier.fillMaxWidth().focusRequester(focusRequester),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = textFieldBackground,
-                        focusedContainerColor = textFieldBackground,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent
-                    ),
+                AuthTextField(
+                    value = lastName,
+                    title = stringResource(R.string.your_last_name),
+                    label = stringResource(R.string.last_name),
+                    onValueChange = { lastName = it },
+                    columnModifier = Modifier.weight(1f)
                 )
             }
-            Column {
-                Text(
-                    text = stringResource(id = R.string.your_password),
-                    fontSize = 14.sp,
-                    color = darkGray,
-                    fontFamily = InterFontFamily,
-                    modifier = Modifier.padding(start = 14.dp, bottom = 4.dp)
-                )
-                TextField(
-                    value = password,
-                    onValueChange = { password = it },
-                    label = { Text(text = stringResource(id = R.string.password)) },
-                    shape = RoundedCornerShape(32.dp),
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = TextFieldDefaults.colors(
-                        unfocusedContainerColor = textFieldBackground,
-                        focusedContainerColor = textFieldBackground,
-                        unfocusedIndicatorColor = Color.Transparent,
-                        disabledIndicatorColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Transparent
-                    ),
-                )
-            }
+            AuthTextField(
+                value = email,
+                title = stringResource(R.string.your_email),
+                label = stringResource(R.string.email),
+                onValueChange = { email = it },
+            )
+            AuthTextField(
+                value = password,
+                title = stringResource(R.string.your_password),
+                label = stringResource(R.string.password),
+                onValueChange = { password = it },
+            )
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -185,7 +143,7 @@ fun LoginModalSheetContent(
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
                     Text(
-                        text = stringResource(R.string.log_in),
+                        text = stringResource(R.string.sign_up),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = InterFontFamily,
@@ -210,12 +168,9 @@ fun LoginModalSheetContent(
     }
 }
 
-/*
 @Preview
 @Composable
-fun PreviewLoginModalSheetContent() {
-    LoginModalSheetContent(
-        focusRequester = FocusRequester(null),
-        onClose = {},
-    )
-}*/
+fun PreviewSignUpModalSheetContent() {
+    val focusRequester = remember { FocusRequester() }
+    SignUpModalSheetContent(focusRequester = focusRequester, onClose = {})
+}

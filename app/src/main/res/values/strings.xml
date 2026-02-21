@@ -6,6 +6,7 @@
     <string name="add_task_title">Add your task/reminder title</string>
     <string name="description">description</string>
     <string name="sign_in">Sign In</string>
+    <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>
     <string name="continue_with_email">Sign in with Email</string>
     <string name="continue_with_google">Continue with Google</string>
@@ -19,4 +20,8 @@
     <string name="forgot_your_password">Forgot your password?</string>
     <string name="log_in_with_email">Log in with Email</string>
     <string name="sign_up_with_email">Sign up with Email</string>
+    <string name="your_first_name">Your First Name</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="your_last_name">Your Last Name</string>
 </resources>

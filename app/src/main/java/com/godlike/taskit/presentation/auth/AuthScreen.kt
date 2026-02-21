@@ -1,4 +1,4 @@
-package com.godlike.taskit.presentation.login
+package com.godlike.taskit.presentation.auth
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
@@ -33,6 +33,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,6 +51,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.godlike.taskit.R
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.facebookBlue
@@ -61,8 +63,10 @@ import com.godlike.taskit.ui.theme.white
 import com.godlike.taskit.util.LoginTopAppBar
 
 @Composable
-fun LoginScreen(
-) {
+fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
+
+    val authState by viewModel.authState.collectAsState()
+
     LoginScreenContent(
         onSignInWithEmail = {},
         onContinueWithGoogle = {},
