@@ -10,19 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,29 +37,20 @@ import com.godlike.taskit.ui.theme.white
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpModalSheet(
-    sheetState: SheetState,
     onClose: () -> Unit,
+    onSignUpWithEmail: (String, String) ->  Unit,
 ) {
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(sheetState.currentValue) {
-        if (sheetState.currentValue == SheetValue.Expanded) {
-            focusRequester.requestFocus()
-            keyboardController?.show()
-        }
-    }
 
     SignUpModalSheetContent(
-        focusRequester = focusRequester,
-        onClose = onClose
+        onClose = onClose,
+        onSignUpWithEmail = onSignUpWithEmail
     )
 }
 
 @Composable
 fun SignUpModalSheetContent(
-    focusRequester: FocusRequester,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onSignUpWithEmail: (String, String) ->  Unit,
 ) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -78,7 +63,7 @@ fun SignUpModalSheetContent(
             .background(color = modalSheetBackground)
             .padding(16.dp)
     ) {
-        CloseButton { onClose }
+        CloseButton(onClose)
 
         Column(
             modifier = Modifier
@@ -105,15 +90,13 @@ fun SignUpModalSheetContent(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             Row(
-                Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 AuthTextField(
                     value = firstName,
                     title = stringResource(R.string.your_first_name),
                     label = stringResource(R.string.first_name),
                     onValueChange = { firstName = it },
-                    modifier = Modifier.focusRequester(focusRequester),
                     columnModifier = Modifier.weight(1f)
                 )
                 AuthTextField(
@@ -139,7 +122,7 @@ fun SignUpModalSheetContent(
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { },
+                    onClick = { onSignUpWithEmail(email, password) },
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
                     Text(
@@ -171,6 +154,8 @@ fun SignUpModalSheetContent(
 @Preview
 @Composable
 fun PreviewSignUpModalSheetContent() {
-    val focusRequester = remember { FocusRequester() }
-    SignUpModalSheetContent(focusRequester = focusRequester, onClose = {})
+    SignUpModalSheetContent(
+        onClose = {},
+        onSignUpWithEmail = { string: String, string1: String -> },
+    )
 }

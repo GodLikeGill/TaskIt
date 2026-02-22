@@ -12,18 +12,13 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetState
-import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,29 +38,19 @@ import com.godlike.taskit.ui.theme.white
 
 @Composable
 fun LoginModalSheet(
-    sheetState: SheetState,
     onClose: () -> Unit,
+    onSignInWithEmail: (String, String) -> Unit
 ) {
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(sheetState.currentValue) {
-        if (sheetState.currentValue == SheetValue.Expanded) {
-            focusRequester.requestFocus()
-            keyboardController?.show()
-        }
-    }
-
     LoginModalSheetContent(
-        focusRequester = focusRequester,
-        onClose = onClose
+        onClose = onClose,
+        onSignInWithEmail = onSignInWithEmail,
     )
 }
 
 @Composable
 fun LoginModalSheetContent(
-    focusRequester: FocusRequester,
-    onClose: () -> Unit
+    onClose: () -> Unit,
+    onSignInWithEmail: (String, String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -76,7 +61,7 @@ fun LoginModalSheetContent(
             .background(color = modalSheetBackground)
             .padding(16.dp)
     ) {
-        CloseButton { onClose }
+        CloseButton(onClose)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -106,9 +91,7 @@ fun LoginModalSheetContent(
                 title = stringResource(R.string.your_email),
                 label = stringResource(R.string.email),
                 onValueChange = { email = it },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .focusRequester(focusRequester)
+                modifier = Modifier.fillMaxWidth()
             )
             AuthTextField(
                 value = password,
@@ -120,7 +103,7 @@ fun LoginModalSheetContent(
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { },
+                    onClick = {onSignInWithEmail(email, password) },
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
                     Text(
@@ -152,6 +135,8 @@ fun LoginModalSheetContent(
 @Preview
 @Composable
 fun PreviewLoginModalSheetContent() {
-    val focusRequester = remember { FocusRequester() }
-    LoginModalSheetContent(focusRequester = focusRequester, onClose = {})
+    LoginModalSheetContent(
+        onClose = {},
+        onSignInWithEmail = { string: String, string1: String -> }
+    )
 }

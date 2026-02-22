@@ -14,20 +14,14 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -41,7 +35,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -53,6 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.godlike.taskit.R
+import com.godlike.taskit.presentation.components.SocialLoginButton
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.facebookBlue
 import com.godlike.taskit.ui.theme.grayBackground
@@ -63,12 +57,14 @@ import com.godlike.taskit.ui.theme.white
 import com.godlike.taskit.util.LoginTopAppBar
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
-
+fun AuthScreen(
+    viewModel: LoginViewModel = hiltViewModel(),
+) {
     val authState by viewModel.authState.collectAsState()
 
-    LoginScreenContent(
-        onSignInWithEmail = {},
+    AuthScreenContent(
+        onSignInWithEmail = { email, password -> viewModel.login(email, password) },
+        onSignUpWithEmail = { email, password -> viewModel.register(email, password) },
         onContinueWithGoogle = {},
         onContinueWithFacebook = {},
     )
@@ -76,20 +72,21 @@ fun LoginScreen(viewModel: LoginViewModel = hiltViewModel()) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun LoginScreenContent(
-    onSignInWithEmail: () -> Unit,
+private fun AuthScreenContent(
+    onSignInWithEmail: (String, String) -> Unit,
+    onSignUpWithEmail: (String, String) -> Unit,
     onContinueWithGoogle: () -> Unit,
     onContinueWithFacebook: () -> Unit,
 ) {
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = colorResource(id = R.color.background),
-        topBar = { LoginTopAppBar() }
-    ) { paddingValues ->
+        topBar = { LoginTopAppBar() }) { paddingValues ->
 
         var expanded by remember { mutableStateOf(false) }
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-        var showBottomSheet by remember { mutableStateOf(false) }
+        var showLoginModalSheet by remember { mutableStateOf(false) }
+        var showSignUpModalSheet by remember { mutableStateOf(false) }
 
         Box(
             modifier = Modifier
@@ -102,7 +99,6 @@ private fun LoginScreenContent(
                     expanded = false
                 },
         ) {
-
             Text(
                 text = stringResource(R.string.app_slogan),
                 modifier = Modifier
@@ -120,18 +116,13 @@ private fun LoginScreenContent(
                     .fillMaxWidth(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.spacedBy(4.dp)
-            )
-            {
-
+            ) {
                 val buttonModifier = Modifier.fillMaxWidth(0.7f)
 
                 AnimatedContent(
-                    targetState = expanded,
-                    transitionSpec = {
-                        fadeIn(tween(200)) + expandVertically() togetherWith
-                                fadeOut(tween(150)) + shrinkVertically()
-                    },
-                    label = "Auth Button Animation"
+                    targetState = expanded, transitionSpec = {
+                        fadeIn(tween(200)) + expandVertically() togetherWith fadeOut(tween(150)) + shrinkVertically()
+                    }, label = "Auth Button Animation"
                 ) { isExpanded ->
                     if (!isExpanded) {
                         SocialLoginButton(
@@ -159,16 +150,14 @@ private fun LoginScreenContent(
                                 text = stringResource(id = R.string.log_in_with_email),
                                 painter = painterResource(R.drawable.email_logo),
                                 bgColor = Color.Transparent,
-                                onClick = { showBottomSheet = true }
-                            )
+                                onClick = { showLoginModalSheet = true })
                             SocialLoginButton(
                                 modifier = Modifier,
                                 text = stringResource(id = R.string.sign_up_with_email),
                                 painter = rememberVectorPainter(Icons.Default.Create),
                                 iconColor = white,
                                 bgColor = Color.Transparent,
-                                onClick = { showBottomSheet = true }
-                            )
+                                onClick = { showSignUpModalSheet = true })
                         }
                     }
                 }
@@ -177,15 +166,13 @@ private fun LoginScreenContent(
                     text = stringResource(id = R.string.continue_with_google),
                     painter = painterResource(R.drawable.google_logo),
                     bgColor = grayBackground,
-                    onClick = { showBottomSheet = true }
-                )
+                    onClick = { })
                 SocialLoginButton(
                     modifier = buttonModifier,
                     text = stringResource(id = R.string.continue_with_facebook),
                     painter = painterResource(R.drawable.facebook_logo),
                     bgColor = facebookBlue,
-                    onClick = { showBottomSheet = true }
-                )
+                    onClick = { })
                 Text(
                     modifier = buttonModifier.clickable {},
                     text = stringResource(R.string.new_user),
@@ -197,56 +184,31 @@ private fun LoginScreenContent(
                 )
             }
 
-            if (showBottomSheet) {
+            if (showLoginModalSheet || showSignUpModalSheet) {
                 ModalBottomSheet(
-                    onDismissRequest = { showBottomSheet = false },
-                    sheetState = sheetState,
-                    containerColor = modalSheetBackground
+                    onDismissRequest = {
+                        showLoginModalSheet = false
+                        showSignUpModalSheet = false
+                    }, sheetState = sheetState, containerColor = modalSheetBackground
                 ) {
-                    LoginModalSheet(
-                        sheetState = sheetState,
-                        onClose = { showBottomSheet = false }
-                    )
+                    if (showLoginModalSheet) LoginModalSheet(
+                        onSignInWithEmail = onSignInWithEmail,
+                        onClose = { showLoginModalSheet = false })
+                    if (showSignUpModalSheet) SignUpModalSheet(
+                        onSignUpWithEmail = onSignUpWithEmail,
+                        onClose = { showSignUpModalSheet = false })
                 }
             }
         }
     }
 }
 
-@Composable
-private fun SocialLoginButton(
-    modifier: Modifier = Modifier,
-    text: String,
-    painter: Painter,
-    iconColor: Color? = null,
-    bgColor: Color,
-    onClick: () -> Unit,
-) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        colors = ButtonDefaults.buttonColors(containerColor = bgColor)
-    ) {
-        Icon(
-            painter = painter,
-            contentDescription = null,
-            tint = iconColor ?: Color.Unspecified,
-            modifier = Modifier.size(20.dp),
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = text,
-            fontSize = 16.sp,
-            fontFamily = InterFontFamily
-        )
-    }
-}
-
 @Preview
 @Composable
 fun PreviewLoginScreenContent() {
-    LoginScreenContent(
-        onSignInWithEmail = {},
+    AuthScreenContent(
+        onSignInWithEmail = { string: String, string1: String -> },
+        onSignUpWithEmail = { string: String, string1: String -> },
         onContinueWithGoogle = {},
         onContinueWithFacebook = {},
     )

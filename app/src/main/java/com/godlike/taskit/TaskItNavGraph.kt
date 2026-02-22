@@ -6,7 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.godlike.taskit.presentation.auth.LoginScreen
+import com.godlike.taskit.presentation.auth.AuthScreen
 
 @Composable
 fun TaskItNavGraph(
@@ -20,6 +20,6 @@ fun TaskItNavGraph(
         startDestination = startDestination,
         modifier = modifier,
     ) {
-        composable(startDestination) { LoginScreen() }
+        composable(startDestination) { AuthScreen() }
     }
 }
