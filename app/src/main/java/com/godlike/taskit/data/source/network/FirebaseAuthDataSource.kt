@@ -16,7 +16,7 @@ class FirebaseAuthDataSource(private val firebaseAuth: FirebaseAuth) {
         return result.user
     }
 
-    fun signOut() { firebaseAuth.signOut() }
+    suspend fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
 
-    fun getCurrentUser(): FirebaseUser? = firebaseAuth.currentUser
+    suspend fun signOut() { firebaseAuth.signOut() }
 }

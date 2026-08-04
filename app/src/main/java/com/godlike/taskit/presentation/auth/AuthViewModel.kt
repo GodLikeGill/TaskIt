@@ -3,6 +3,7 @@ package com.godlike.taskit.presentation.auth
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.godlike.taskit.domain.model.User
+import com.godlike.taskit.domain.usecase.user.CurrentUserUseCase
 import com.godlike.taskit.domain.usecase.user.LoginUseCase
 import com.godlike.taskit.domain.usecase.user.LogoutUseCase
 import com.godlike.taskit.domain.usecase.user.RegisterUseCase
@@ -23,36 +24,42 @@ sealed class AuthState {
 class LoginViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
+    private val currentUserUseCase: CurrentUserUseCase,
     private val logoutUseCase: LogoutUseCase,
 ) : ViewModel() {
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
-    fun login(email: String, password: String) {
+    private fun executeAuth(
+        block: suspend () -> Result<User?>
+    ) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-            try {
-                val user = loginUseCase(email, password)
-                if (user != null) _authState.value = AuthState.Success(user)
-                else _authState.value = AuthState.Error("Login failed")
-            } catch (e: Exception) {
-                _authState.value = AuthState.Error(e.localizedMessage ?: "Unknown error!")
-            }
+
+            block()
+                .onSuccess { user ->
+                    _authState.value = if (user != null) {
+                        AuthState.Success(user)
+                    } else {
+                        AuthState.Error("Unknown error!")
+                    }
+                }.onFailure { error ->
+                    _authState.value = AuthState.Error(error.localizedMessage?: "Unknown error!")
+                }
         }
     }
 
+    fun login(email: String, password: String) {
+        executeAuth { loginUseCase(email, password) }
+    }
+
     fun register(email: String, password: String) {
-        viewModelScope.launch {
-            _authState.value = AuthState.Loading
-            try {
-                val user = registerUseCase(email, password)
-                if (user != null) _authState.value = AuthState.Success(user)
-                else _authState.value = AuthState.Error("Login failed")
-            } catch (e: Exception) {
-                _authState.value = AuthState.Error(e.localizedMessage ?: "Unknown error!")
-            }
-        }
+        executeAuth { registerUseCase(email, password) }
+    }
+
+    fun currentUser() {
+        executeAuth { currentUserUseCase() }
     }
 
     fun logout() {

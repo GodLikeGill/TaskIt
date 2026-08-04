@@ -5,7 +5,11 @@ import com.godlike.taskit.domain.model.User
 import javax.inject.Inject
 
 class LoginUseCase @Inject constructor(private val repository: AuthRepository) {
-    suspend operator fun invoke(email: String, password: String): User? {
-        return repository.login(email, password)
+    suspend operator fun invoke(email: String, password: String): Result<User?> {
+        return try {
+            Result.success(repository.login(email, password))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

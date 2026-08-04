@@ -5,20 +5,23 @@ package com.godlike.taskit.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -35,14 +38,15 @@ import com.godlike.taskit.ui.theme.modalSheetBackground
 import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
 
-
 @Composable
 fun LoginModalSheet(
     onClose: () -> Unit,
+    authState: AuthState,
     onSignInWithEmail: (String, String) -> Unit
 ) {
     LoginModalSheetContent(
         onClose = onClose,
+        authState = authState,
         onSignInWithEmail = onSignInWithEmail,
     )
 }
@@ -50,6 +54,7 @@ fun LoginModalSheet(
 @Composable
 fun LoginModalSheetContent(
     onClose: () -> Unit,
+    authState: AuthState,
     onSignInWithEmail: (String, String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
@@ -103,7 +108,7 @@ fun LoginModalSheetContent(
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = {onSignInWithEmail(email, password) },
+                    onClick = { onSignInWithEmail(email, password) },
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
                     Text(
@@ -128,6 +133,23 @@ fun LoginModalSheetContent(
                     textAlign = TextAlign.Center,
                 )
             }
+            when(authState) {
+                is AuthState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+                is AuthState.Error -> {
+                    Text(
+                        text = authState.message,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .padding(top = 40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+                else -> {}
+            }
         }
     }
 }
@@ -137,6 +159,7 @@ fun LoginModalSheetContent(
 fun PreviewLoginModalSheetContent() {
     LoginModalSheetContent(
         onClose = {},
+        authState = AuthState.Loading,
         onSignInWithEmail = { string: String, string1: String -> }
     )
 }

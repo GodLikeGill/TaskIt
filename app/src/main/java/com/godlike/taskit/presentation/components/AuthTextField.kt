@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.sp
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.darkGray
 import com.godlike.taskit.ui.theme.textFieldBackground
+import com.godlike.taskit.ui.theme.white
 
 @Composable
 fun AuthTextField(
@@ -44,6 +45,9 @@ fun AuthTextField(
                 .fillMaxWidth()
                 .then(modifier),
             colors = TextFieldDefaults.colors(
+                focusedTextColor = white,
+                unfocusedTextColor = white,
+                focusedLabelColor = darkGray,
                 unfocusedContainerColor = textFieldBackground,
                 focusedContainerColor = textFieldBackground,
                 unfocusedIndicatorColor = Color.Transparent,

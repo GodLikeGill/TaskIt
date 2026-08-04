@@ -4,10 +4,10 @@ import com.godlike.taskit.data.repository.AuthRepository
 import com.godlike.taskit.domain.model.User
 import javax.inject.Inject
 
-class RegisterUseCase @Inject constructor(private val authRepository: AuthRepository) {
-    suspend operator fun invoke(email: String, password: String): Result<User?> {
+class CurrentUserUseCase @Inject constructor(private val repository: AuthRepository) {
+    suspend operator fun invoke(): Result<User?> {
         return try {
-            Result.success(authRepository.register(email, password))
+            Result.success(repository.getCurrentUser())
         } catch (e: Exception) {
             Result.failure(e)
         }

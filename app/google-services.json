@@ -12,7 +12,20 @@
           "package_name": "com.godlike.taskit"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "15780260723-obt87abm2c7d1um21rbkn6diah0p3guh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godlike.taskit",
+            "certificate_hash": "7e1cdb78c17c75a4be6bb6f5512bfc5cafe9eba1"
+          }
+        },
+        {
+          "client_id": "15780260723-djr2u8ji46usmliot8v2u1ajmkf3mdjo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAe4DGFK6RZKr8UBmi1Twny5nOx5EiqyEg"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "15780260723-djr2u8ji46usmliot8v2u1ajmkf3mdjo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

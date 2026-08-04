@@ -19,13 +19,13 @@ class AuthRepository @Inject constructor(
         }
     }
 
-    suspend fun logout() {
-        authDataSource.signOut()
-    }
-
-    fun getCurrentUser(): User? {
+    suspend fun getCurrentUser(): User? {
         return authDataSource.getCurrentUser()?.let { firebaseUser ->
             User(uid = firebaseUser.uid, email = firebaseUser.email.orEmpty())
         }
+    }
+
+    suspend fun logout() {
+        authDataSource.signOut()
     }
 }

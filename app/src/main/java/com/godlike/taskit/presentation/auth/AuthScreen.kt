@@ -1,5 +1,6 @@
 package com.godlike.taskit.presentation.auth
 
+import android.graphics.Paint
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
@@ -18,15 +19,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Create
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +50,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.godlike.taskit.R
+import com.godlike.taskit.domain.model.User
 import com.godlike.taskit.presentation.components.SocialLoginButton
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.facebookBlue
@@ -58,21 +63,30 @@ import com.godlike.taskit.util.LoginTopAppBar
 
 @Composable
 fun AuthScreen(
+    onAuthSuccess: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
     val authState by viewModel.authState.collectAsState()
 
     AuthScreenContent(
+        authState = authState,
         onSignInWithEmail = { email, password -> viewModel.login(email, password) },
         onSignUpWithEmail = { email, password -> viewModel.register(email, password) },
         onContinueWithGoogle = {},
         onContinueWithFacebook = {},
     )
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) {
+            onAuthSuccess()
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AuthScreenContent(
+    authState: AuthState,
     onSignInWithEmail: (String, String) -> Unit,
     onSignUpWithEmail: (String, String) -> Unit,
     onContinueWithGoogle: () -> Unit,
@@ -81,7 +95,8 @@ private fun AuthScreenContent(
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = colorResource(id = R.color.background),
-        topBar = { LoginTopAppBar() }) { paddingValues ->
+        topBar = { LoginTopAppBar() }
+    ) { paddingValues ->
 
         var expanded by remember { mutableStateOf(false) }
         val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
@@ -166,15 +181,17 @@ private fun AuthScreenContent(
                     text = stringResource(id = R.string.continue_with_google),
                     painter = painterResource(R.drawable.google_logo),
                     bgColor = grayBackground,
-                    onClick = { })
+                    onClick = onContinueWithGoogle
+                )
                 SocialLoginButton(
                     modifier = buttonModifier,
                     text = stringResource(id = R.string.continue_with_facebook),
                     painter = painterResource(R.drawable.facebook_logo),
                     bgColor = facebookBlue,
-                    onClick = { })
+                    onClick = onContinueWithFacebook
+                )
                 Text(
-                    modifier = buttonModifier.clickable {},
+                    modifier = Modifier.clickable {},
                     text = stringResource(R.string.new_user),
                     textAlign = TextAlign.Center,
                     color = lightGray,
@@ -192,9 +209,11 @@ private fun AuthScreenContent(
                     }, sheetState = sheetState, containerColor = modalSheetBackground
                 ) {
                     if (showLoginModalSheet) LoginModalSheet(
+                        authState = authState,
                         onSignInWithEmail = onSignInWithEmail,
                         onClose = { showLoginModalSheet = false })
                     if (showSignUpModalSheet) SignUpModalSheet(
+                        authState = authState,
                         onSignUpWithEmail = onSignUpWithEmail,
                         onClose = { showSignUpModalSheet = false })
                 }
@@ -207,6 +226,7 @@ private fun AuthScreenContent(
 @Composable
 fun PreviewLoginScreenContent() {
     AuthScreenContent(
+        authState = AuthState.Loading,
         onSignInWithEmail = { string: String, string1: String -> },
         onSignUpWithEmail = { string: String, string1: String -> },
         onContinueWithGoogle = {},

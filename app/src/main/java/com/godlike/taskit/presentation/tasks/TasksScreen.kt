@@ -1,5 +1,6 @@
 package com.godlike.taskit.presentation.tasks
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,11 +35,13 @@ import com.godlike.taskit.ui.theme.black
 import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
 import com.godlike.taskit.util.TasksTopAppBar
+import kotlin.math.log
 
 @Composable
 fun TasksScreen(
     viewModel: TasksViewModel = hiltViewModel()
 ) {
+    Log.d("TAG", "TasksScreen: ")
     val tasks by viewModel.tasks.collectAsState()
     TasksScreenContent(
         tasks,

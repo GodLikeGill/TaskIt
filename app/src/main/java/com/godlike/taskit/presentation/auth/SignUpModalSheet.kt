@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -38,11 +41,12 @@ import com.godlike.taskit.ui.theme.white
 @Composable
 fun SignUpModalSheet(
     onClose: () -> Unit,
+    authState: AuthState,
     onSignUpWithEmail: (String, String) ->  Unit,
 ) {
-
     SignUpModalSheetContent(
         onClose = onClose,
+        authState = authState,
         onSignUpWithEmail = onSignUpWithEmail
     )
 }
@@ -50,6 +54,7 @@ fun SignUpModalSheet(
 @Composable
 fun SignUpModalSheetContent(
     onClose: () -> Unit,
+    authState: AuthState,
     onSignUpWithEmail: (String, String) ->  Unit,
 ) {
     var firstName by remember { mutableStateOf("") }
@@ -147,6 +152,23 @@ fun SignUpModalSheetContent(
                     textAlign = TextAlign.Center,
                 )
             }
+            when(authState) {
+                is AuthState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                    )
+                }
+                is AuthState.Error -> {
+                    Text(
+                        text = authState.message,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .padding(top = 40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+                else -> {}
+            }
         }
     }
 }
@@ -156,6 +178,7 @@ fun SignUpModalSheetContent(
 fun PreviewSignUpModalSheetContent() {
     SignUpModalSheetContent(
         onClose = {},
+        authState = AuthState.Loading,
         onSignUpWithEmail = { string: String, string1: String -> },
     )
 }

@@ -1,25 +1,33 @@
 package com.godlike.taskit
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.godlike.taskit.presentation.auth.AuthScreen
+import com.godlike.taskit.presentation.tasks.TasksScreen
 
 @Composable
 fun TaskItNavGraph(
-    modifier: Modifier = Modifier,
     navController: NavHostController = rememberNavController(),
-    startDestination : String = "tasks",
+    startDestination: String = TaskItDestinations.AUTH_ROUTE,
+    navActions: TaskItNavigationActions = remember(navController) {
+        TaskItNavigationActions(navController)
+    }
 ) {
-
     NavHost(
         navController = navController,
         startDestination = startDestination,
-        modifier = modifier,
     ) {
-        composable(startDestination) { AuthScreen() }
+        composable(route = TaskItDestinations.AUTH_ROUTE) {
+            AuthScreen(onAuthSuccess = {
+                navActions.navigateToTasks()
+            })
+        }
+        composable(route = TaskItDestinations.TASKS_ROUTE) {
+            TasksScreen()
+        }
     }
 }

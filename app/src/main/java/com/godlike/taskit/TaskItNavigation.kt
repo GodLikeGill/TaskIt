@@ -9,28 +9,36 @@ import com.godlike.taskit.domain.model.User
 /**
  * Screens used in [TaskItDestinations]
  */
-
 private object TaskItScreens {
     const val AUTH_SCREEN = "auth"
     const val TASKS_SCREEN = "tasks"
-
 }
 
+/**
+ * Arguments used in [TaskItDestinations]
+ */
 object TaskItDestinationArgs {
-    const val USER = "currentUser"
+    const val USER = "user"
 }
 
+/**
+ * Destinations used in [TaskItNavGraph]
+ */
 object TaskItDestinations {
     const val AUTH_ROUTE = AUTH_SCREEN
-    const val TASKS_ROUTE = "$TASKS_SCREEN/{$USER}"
+        //const val TASKS_ROUTE = "$TASKS_SCREEN/$USER"
+    const val TASKS_ROUTE = TaskItScreens.TASKS_SCREEN
 }
 
+/**
+ * Models the navigation actions in the app.
+ */
 class TaskItNavigationActions(private val navController: NavHostController) {
     fun navigateToAuth() {
         navController.navigate(AUTH_SCREEN)
     }
 
-    fun navigateToTasks(user: User) {
-        navController.navigate("$TASKS_SCREEN/$user")
+    fun navigateToTasks() {
+        navController.navigate(TaskItDestinations.TASKS_ROUTE)
     }
 }
