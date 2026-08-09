@@ -39,12 +39,13 @@ import kotlin.math.log
 
 @Composable
 fun TasksScreen(
+    onSettingsClick: () -> Unit,
     viewModel: TasksViewModel = hiltViewModel()
 ) {
-    Log.d("TAG", "TasksScreen: ")
     val tasks by viewModel.tasks.collectAsState()
     TasksScreenContent(
         tasks,
+        onSettingsClick = onSettingsClick,
         onAddTask = { viewModel.onAddTask(it) },
         onDeleteTasks = { viewModel.onDeleteTask(it) },
         onCheckedChange = { taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted) }
@@ -55,6 +56,7 @@ fun TasksScreen(
 @Composable
 fun TasksScreenContent(
     tasks: List<Task>,
+    onSettingsClick: () -> Unit,
     onAddTask: (Task) -> Unit,
     onDeleteTasks: (String) -> Unit,
     onCheckedChange: (String, Boolean) -> Unit
@@ -64,7 +66,7 @@ fun TasksScreenContent(
     Scaffold(
         modifier = Modifier.statusBarsPadding(),
         containerColor = colorResource(id = R.color.background),
-        topBar = { TasksTopAppBar() },
+        topBar = { TasksTopAppBar(onSettingsClick = onSettingsClick) },
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { showBottomSheet = true },
@@ -129,6 +131,7 @@ fun PreviewTasksScreenContent() {
 
     TasksScreenContent(
         tasks = fakeTasks,
+        onSettingsClick = {},
         onAddTask = {},
         onDeleteTasks = {},
         onCheckedChange = { _, _ -> }

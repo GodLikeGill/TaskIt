@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.godlike.taskit.presentation.auth.AuthScreen
+import com.godlike.taskit.presentation.setting.SettingsScreen
 import com.godlike.taskit.presentation.tasks.TasksScreen
 
 @Composable
@@ -22,12 +23,13 @@ fun TaskItNavGraph(
         startDestination = startDestination,
     ) {
         composable(route = TaskItDestinations.AUTH_ROUTE) {
-            AuthScreen(onAuthSuccess = {
-                navActions.navigateToTasks()
-            })
+            AuthScreen(onAuthSuccess = { navActions.navigateToTasks() })
         }
         composable(route = TaskItDestinations.TASKS_ROUTE) {
-            TasksScreen()
+            TasksScreen(onSettingsClick = { navActions.navigateToSettings() })
+        }
+        composable(route = TaskItDestinations.SETTINGS_ROUTE) {
+            SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() })
         }
     }
 }

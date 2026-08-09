@@ -11,6 +11,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import com.godlike.taskit.presentation.components.AuthTextField
 import com.godlike.taskit.presentation.components.CloseButton
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.darkGray
+import com.godlike.taskit.ui.theme.lightGray
 import com.godlike.taskit.ui.theme.modalSheetBackground
 import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
@@ -61,6 +64,7 @@ fun SignUpModalSheetContent(
     var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var checked by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -124,6 +128,24 @@ fun SignUpModalSheetContent(
                 label = stringResource(R.string.password),
                 onValueChange = { password = it },
             )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Switch(
+                    colors = SwitchDefaults.colors(
+                        checkedTrackColor = taskItRed
+                    ),
+                    checked = checked,
+                    onCheckedChange = { checked = it }
+                )
+                Text(
+                    text = stringResource(R.string.remember_me),
+                    color = lightGray,
+                    fontSize = 16.sp,
+                    fontFamily = InterFontFamily
+                )
+            }
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),

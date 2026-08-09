@@ -24,4 +24,9 @@
     <string name="first_name">First Name</string>
     <string name="last_name">Last Name</string>
     <string name="your_last_name">Your Last Name</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="account">Account</string>
+    <string name="logout">Log out</string>
+    <string name="remember_me">Remember me</string>
 </resources>

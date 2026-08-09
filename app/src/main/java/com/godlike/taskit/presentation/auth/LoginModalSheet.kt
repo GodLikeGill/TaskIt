@@ -5,14 +5,16 @@ package com.godlike.taskit.presentation.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Switch
+import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -34,15 +36,14 @@ import com.godlike.taskit.presentation.components.AuthTextField
 import com.godlike.taskit.presentation.components.CloseButton
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.darkGray
+import com.godlike.taskit.ui.theme.lightGray
 import com.godlike.taskit.ui.theme.modalSheetBackground
 import com.godlike.taskit.ui.theme.taskItRed
 import com.godlike.taskit.ui.theme.white
 
 @Composable
 fun LoginModalSheet(
-    onClose: () -> Unit,
-    authState: AuthState,
-    onSignInWithEmail: (String, String) -> Unit
+    onClose: () -> Unit, authState: AuthState, onSignInWithEmail: (String, String) -> Unit
 ) {
     LoginModalSheetContent(
         onClose = onClose,
@@ -53,12 +54,11 @@ fun LoginModalSheet(
 
 @Composable
 fun LoginModalSheetContent(
-    onClose: () -> Unit,
-    authState: AuthState,
-    onSignInWithEmail: (String, String) -> Unit
+    onClose: () -> Unit, authState: AuthState, onSignInWithEmail: (String, String) -> Unit
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var checked by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier
@@ -105,6 +105,23 @@ fun LoginModalSheetContent(
                 onValueChange = { password = it },
                 modifier = Modifier.fillMaxWidth()
             )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Switch(
+                    colors = SwitchDefaults.colors(
+                        checkedTrackColor = taskItRed
+                    ),
+                    checked = checked,
+                    onCheckedChange = { checked = it })
+                Text(
+                    text = stringResource(R.string.remember_me),
+                    color = lightGray,
+                    fontSize = 16.sp,
+                    fontFamily = InterFontFamily
+                )
+            }
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
@@ -133,12 +150,13 @@ fun LoginModalSheetContent(
                     textAlign = TextAlign.Center,
                 )
             }
-            when(authState) {
+            when (authState) {
                 is AuthState.Loading -> {
                     CircularProgressIndicator(
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
                 }
+
                 is AuthState.Error -> {
                     Text(
                         text = authState.message,
@@ -148,6 +166,7 @@ fun LoginModalSheetContent(
                             .align(Alignment.CenterHorizontally)
                     )
                 }
+
                 else -> {}
             }
         }
@@ -160,6 +179,5 @@ fun PreviewLoginModalSheetContent() {
     LoginModalSheetContent(
         onClose = {},
         authState = AuthState.Loading,
-        onSignInWithEmail = { string: String, string1: String -> }
-    )
+        onSignInWithEmail = { _, _ -> })
 }
