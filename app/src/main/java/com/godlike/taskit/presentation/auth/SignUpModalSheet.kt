@@ -201,6 +201,6 @@ fun PreviewSignUpModalSheetContent() {
     SignUpModalSheetContent(
         onClose = {},
         authState = AuthState.Loading,
-        onSignUpWithEmail = { string: String, string1: String -> },
+        onSignUpWithEmail = { _, _ -> },
     )
 }
