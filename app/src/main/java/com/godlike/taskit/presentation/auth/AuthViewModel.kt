@@ -37,15 +37,14 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
-            block()
-                .onSuccess { user ->
+            block().onSuccess { user ->
                     _authState.value = if (user != null) {
                         AuthState.Success(user)
                     } else {
                         AuthState.Error("Unknown error!")
                     }
                 }.onFailure { error ->
-                    _authState.value = AuthState.Error(error.localizedMessage?: "Unknown error!")
+                    _authState.value = AuthState.Error(error.localizedMessage ?: "Unknown error!")
                 }
         }
     }
@@ -54,8 +53,10 @@ class LoginViewModel @Inject constructor(
         executeAuth { loginUseCase(email, password) }
     }
 
-    fun register(email: String, password: String) {
-        executeAuth { registerUseCase(email, password) }
+    fun register(email: String, password: String, firstName: String, lastName: String) {
+        executeAuth {
+            registerUseCase(email, password, firstName, lastName)
+        }
     }
 
     fun currentUser() {

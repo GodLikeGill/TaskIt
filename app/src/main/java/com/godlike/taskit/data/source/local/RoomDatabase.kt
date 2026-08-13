@@ -9,7 +9,7 @@ import com.godlike.taskit.data.source.local.entity.UserEntity
     entities = [TaskEntity::class, UserEntity::class],
     version = 3,
 )
-abstract class Database : RoomDatabase() {
+abstract class RoomDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun userDao(): UserDao
 }

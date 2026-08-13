@@ -10,6 +10,5 @@ data class UserEntity(
     val email: String,
     val firstName: String,
     val lastName: String,
-    val avatarUrl: String?,
-    var taskList: List<Task> = emptyList()
+    val avatarUrl: String?
 )

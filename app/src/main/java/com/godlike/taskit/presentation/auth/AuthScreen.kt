@@ -71,7 +71,7 @@ fun AuthScreen(
     AuthScreenContent(
         authState = authState,
         onSignInWithEmail = { email, password -> viewModel.login(email, password) },
-        onSignUpWithEmail = { email, password -> viewModel.register(email, password) },
+        onSignUpWithEmail = { email, password, firstName, lastName -> viewModel.register(email, password, firstName, lastName) },
         onContinueWithGoogle = {},
         onContinueWithFacebook = {},
     )
@@ -88,7 +88,7 @@ fun AuthScreen(
 private fun AuthScreenContent(
     authState: AuthState,
     onSignInWithEmail: (String, String) -> Unit,
-    onSignUpWithEmail: (String, String) -> Unit,
+    onSignUpWithEmail: (String, String, String, String) -> Unit,
     onContinueWithGoogle: () -> Unit,
     onContinueWithFacebook: () -> Unit,
 ) {
@@ -227,8 +227,8 @@ private fun AuthScreenContent(
 fun PreviewLoginScreenContent() {
     AuthScreenContent(
         authState = AuthState.Loading,
-        onSignInWithEmail = { string: String, string1: String -> },
-        onSignUpWithEmail = { string: String, string1: String -> },
+        onSignInWithEmail = { _, _ -> },
+        onSignUpWithEmail = { _, _, _, _ -> },
         onContinueWithGoogle = {},
         onContinueWithFacebook = {},
     )

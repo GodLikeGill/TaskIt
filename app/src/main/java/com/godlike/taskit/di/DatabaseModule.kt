@@ -3,7 +3,7 @@ package com.godlike.taskit.di
 import android.content.Context
 import androidx.room.Room
 import com.godlike.taskit.data.source.local.TaskDao
-import com.godlike.taskit.data.source.local.Database
+import com.godlike.taskit.data.source.local.RoomDatabase
 import com.godlike.taskit.data.source.local.UserDao
 import dagger.Module
 import dagger.Provides
@@ -18,16 +18,16 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context): Database =
+    fun provideDatabase(@ApplicationContext context: Context): RoomDatabase =
         Room.databaseBuilder(
                 context,
-                Database::class.java,
+                RoomDatabase::class.java,
                 "taskit.db"
             ).fallbackToDestructiveMigration(dropAllTables = true).build()
 
     @Provides
-    fun provideTaskDao(database: Database): TaskDao = database.taskDao()
+    fun provideTaskDao(roomDatabase: RoomDatabase): TaskDao = roomDatabase.taskDao()
 
     @Provides
-    fun provideUserDao(database: Database): UserDao = database.userDao()
+    fun provideUserDao(roomDatabase: RoomDatabase): UserDao = roomDatabase.userDao()
 }

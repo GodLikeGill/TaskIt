@@ -45,7 +45,7 @@ import com.godlike.taskit.ui.theme.white
 fun SignUpModalSheet(
     onClose: () -> Unit,
     authState: AuthState,
-    onSignUpWithEmail: (String, String) ->  Unit,
+    onSignUpWithEmail: (String, String, String, String) ->  Unit,
 ) {
     SignUpModalSheetContent(
         onClose = onClose,
@@ -58,7 +58,7 @@ fun SignUpModalSheet(
 fun SignUpModalSheetContent(
     onClose: () -> Unit,
     authState: AuthState,
-    onSignUpWithEmail: (String, String) ->  Unit,
+    onSignUpWithEmail: (String, String, String, String) ->  Unit,
 ) {
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
@@ -149,7 +149,7 @@ fun SignUpModalSheetContent(
             Column {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = { onSignUpWithEmail(email, password) },
+                    onClick = { onSignUpWithEmail(email, password, firstName, lastName) },
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
                     Text(
@@ -201,6 +201,6 @@ fun PreviewSignUpModalSheetContent() {
     SignUpModalSheetContent(
         onClose = {},
         authState = AuthState.Loading,
-        onSignUpWithEmail = { _, _ -> },
+        onSignUpWithEmail = { _, _, _, _ -> },
     )
 }
