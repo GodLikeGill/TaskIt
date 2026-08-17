@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -96,14 +97,14 @@ fun LoginModalSheetContent(
                 title = stringResource(R.string.your_email),
                 label = stringResource(R.string.email),
                 onValueChange = { email = it },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().testTag("email_field")
             )
             AuthTextField(
                 value = password,
                 title = stringResource(R.string.your_password),
                 label = stringResource(R.string.password),
                 onValueChange = { password = it },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().testTag("password_field")
             )
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -124,7 +125,7 @@ fun LoginModalSheetContent(
             }
             Column {
                 Button(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag("login_button"),
                     onClick = { onSignInWithEmail(email, password) },
                     colors = ButtonDefaults.buttonColors(containerColor = taskItRed)
                 ) {
@@ -153,10 +154,9 @@ fun LoginModalSheetContent(
             when (authState) {
                 is AuthState.Loading -> {
                     CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.CenterHorizontally)
+                        modifier = Modifier.align(Alignment.CenterHorizontally).testTag("loading_indicator")
                     )
                 }
-
                 is AuthState.Error -> {
                     Text(
                         text = authState.message,
@@ -164,6 +164,7 @@ fun LoginModalSheetContent(
                         modifier = Modifier
                             .padding(top = 40.dp)
                             .align(Alignment.CenterHorizontally)
+                            .testTag("error_text")
                     )
                 }
 
