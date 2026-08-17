@@ -21,7 +21,7 @@ sealed class AuthState {
 }
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
+class AuthViewModel @Inject constructor(
     private val loginUseCase: LoginUseCase,
     private val registerUseCase: RegisterUseCase,
     private val currentUserUseCase: CurrentUserUseCase,
@@ -31,9 +31,7 @@ class LoginViewModel @Inject constructor(
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
 
-    private fun executeAuth(
-        block: suspend () -> Result<User?>
-    ) {
+    private fun executeAuth(block: suspend () -> Result<User?>) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
 
