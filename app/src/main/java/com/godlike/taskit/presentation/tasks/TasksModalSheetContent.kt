@@ -35,9 +35,11 @@ import com.godlike.taskit.ui.theme.white
 @Composable
 fun ModalSheetContent(
     onClose: (Task) -> Unit,
+    taskTitle: String = "",
+    taskDescription: String = "",
 ) {
-    var taskTitle by remember { mutableStateOf("") }
-    var taskDescription by remember { mutableStateOf("") }
+    var taskTitle by remember { mutableStateOf(taskTitle) }
+    var taskDescription by remember { mutableStateOf(taskDescription) }
     Column(
         modifier = Modifier
             .fillMaxWidth()

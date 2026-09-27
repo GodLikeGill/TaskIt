@@ -13,7 +13,7 @@ import com.godlike.taskit.presentation.tasks.TasksScreen
 @Composable
 fun TaskItNavGraph(
     navController: NavHostController = rememberNavController(),
-    startDestination: String = TaskItDestinations.AUTH_ROUTE,
+    startDestination: String = TaskItDestinations.TASKS_ROUTE,
     navActions: TaskItNavigationActions = remember(navController) {
         TaskItNavigationActions(navController)
     }

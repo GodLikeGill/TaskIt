@@ -17,12 +17,6 @@ private object TaskItScreens {
     const val SETTINGS_SCREEN = "settings"
 }
 
-/**
- * Arguments used in [TaskItDestinations]
- */
-object TaskItDestinationArgs {
-    const val USER = "user"
-}
 
 /**
  * Destinations used in [TaskItNavGraph]
