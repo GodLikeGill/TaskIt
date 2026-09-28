@@ -26,7 +26,7 @@ fun TaskItNavGraph(
             AuthScreen(onAuthSuccess = { navActions.navigateToTasks() })
         }
         composable(route = TaskItDestinations.TASKS_ROUTE) {
-            TasksScreen(onSettingsClick = { navActions.navigateToSettings() })
+            TasksScreen()
         }
         composable(route = TaskItDestinations.SETTINGS_ROUTE) {
             SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() })

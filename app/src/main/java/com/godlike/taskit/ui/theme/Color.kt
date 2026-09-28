@@ -32,6 +32,8 @@ val SurfaceVariant = Color(0xFF32343E)
 
 val Primary = Color(0xFFFF6267)
 val PrimaryPressed = Color(0xFFE15256)
+val PrimaryLow = Color(0xFFFFB3B1)
+val PrimaryDark = Color(0xFF670011)
 
 val Secondary = Color(0xFF0566D9)
 val SecondaryText = Color(0xFFADC6FF)
@@ -41,7 +43,10 @@ val Urgent = Color(0xFFEF4444)
 val Warning = Color(0xFFF59E0B)
 
 val WorkCategory = Color(0xFF3B82F6)
-val PersonalCategory = Color(0xFF8B5CF6)
+
+val Personal = Color(0xFF463D6A)
+val PersonalContainer = Color(0xFF8B5CF6)
+val PersonalText = Color(0xFFE9DDFF)
 
 val TextPrimary = Color(0xFFF5F7FA)
 val TextSecondary = Color(0xFF9096A9)
