@@ -1,18 +1,27 @@
 package com.godlike.taskit
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.CheckCircleOutline
+import androidx.compose.material.icons.outlined.Search
+import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavDestination.Companion.hierarchy
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.godlike.taskit.presentation.auth.AuthScreen
 import com.godlike.taskit.presentation.setting.SettingsScreen
 import com.godlike.taskit.presentation.tasks.TasksScreen
 import com.godlike.taskit.ui.theme.Surface
+import com.godlike.taskit.util.BottomNavItem
+import com.godlike.taskit.util.TaskItBottomNav
 
 @Composable
 fun TaskItNavGraph(
@@ -22,23 +31,35 @@ fun TaskItNavGraph(
         TaskItNavigationActions(navController)
     }
 ) {
+    val backStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = backStackEntry?.destination
+
+    val items = listOf(
+        BottomNavItem(TaskItDestinations.TASKS_ROUTE, "Tasks", Icons.Outlined.CheckCircleOutline),
+        BottomNavItem(TaskItDestinations.SEARCH_ROUTE, "Search", Icons.Outlined.Search),
+        BottomNavItem(TaskItDestinations.SETTINGS_ROUTE, "Settings", Icons.Outlined.Settings),
+    )
     Scaffold(
-        containerColor = Surface
-    ) { innerPadding ->
+        containerColor = Surface, bottomBar = {
+            TaskItBottomNav(
+                items = items,
+                selectedRoute = items.firstOrNull { item -> currentDestination?.hierarchy?.any { it.route == item.route } == true }?.route,
+                onItemClick = { item ->
+                    navController.navigate(item.route) {
+                        popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                })
+        }) { innerPadding ->
         NavHost(
             navController = navController,
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(route = TaskItDestinations.AUTH_ROUTE) {
-                AuthScreen(onAuthSuccess = { navActions.navigateToTasks() })
-            }
-            composable(route = TaskItDestinations.TASKS_ROUTE) {
-                TasksScreen()
-            }
-            composable(route = TaskItDestinations.SETTINGS_ROUTE) {
-                SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() })
-            }
+            composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen() }
+            composable(TaskItDestinations.SEARCH_ROUTE) { }
+            composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() }) }
         }
     }
 }

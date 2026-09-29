@@ -2,9 +2,11 @@ package com.godlike.taskit
 
 import androidx.navigation.NavHostController
 import com.godlike.taskit.TaskItDestinations.AUTH_ROUTE
+import com.godlike.taskit.TaskItDestinations.SEARCH_ROUTE
 import com.godlike.taskit.TaskItDestinations.SETTINGS_ROUTE
 import com.godlike.taskit.TaskItDestinations.TASKS_ROUTE
 import com.godlike.taskit.TaskItScreens.AUTH_SCREEN
+import com.godlike.taskit.TaskItScreens.SEARCH_SCREEN
 import com.godlike.taskit.TaskItScreens.SETTINGS_SCREEN
 import com.godlike.taskit.TaskItScreens.TASKS_SCREEN
 
@@ -14,6 +16,7 @@ import com.godlike.taskit.TaskItScreens.TASKS_SCREEN
 private object TaskItScreens {
     const val AUTH_SCREEN = "auth"
     const val TASKS_SCREEN = "tasks"
+    const val SEARCH_SCREEN = "search"
     const val SETTINGS_SCREEN = "settings"
 }
 
@@ -23,9 +26,8 @@ private object TaskItScreens {
  */
 object TaskItDestinations {
     const val AUTH_ROUTE = AUTH_SCREEN
-
-    //const val TASKS_ROUTE = "$TASKS_SCREEN/$USER"
     const val TASKS_ROUTE = TASKS_SCREEN
+    const val SEARCH_ROUTE = SEARCH_SCREEN
     const val SETTINGS_ROUTE = SETTINGS_SCREEN
 }
 
@@ -36,7 +38,9 @@ class TaskItNavigationActions(private val navController: NavHostController) {
     fun navigateToAuth() {
         navController.navigate(AUTH_ROUTE)
     }
-
+    fun navigateToSearch() {
+        navController.navigate(SEARCH_ROUTE)
+    }
     fun navigateToTasks() {
         navController.navigate(TASKS_ROUTE)
     }

@@ -231,5 +231,6 @@ fun PreviewTasksScreenContent() {
         tasks = fakeTasks,
         onAddTask = {},
         onDeleteTask = {},
-        onCheckedChange = { _, _ -> })
+        onCheckedChange = { _, _ -> }
+    )
 }
