@@ -6,11 +6,13 @@ import com.godlike.taskit.TaskItDestinations.NEW_TASK_ROUTE
 import com.godlike.taskit.TaskItDestinations.SEARCH_ROUTE
 import com.godlike.taskit.TaskItDestinations.SETTINGS_ROUTE
 import com.godlike.taskit.TaskItDestinations.TASKS_ROUTE
+import com.godlike.taskit.TaskItDestinations.UPCOMING_ROUTE
 import com.godlike.taskit.TaskItScreens.AUTH_SCREEN
 import com.godlike.taskit.TaskItScreens.NEW_TASK_SCREEN
 import com.godlike.taskit.TaskItScreens.SEARCH_SCREEN
 import com.godlike.taskit.TaskItScreens.SETTINGS_SCREEN
 import com.godlike.taskit.TaskItScreens.TASKS_SCREEN
+import com.godlike.taskit.TaskItScreens.UPCOMING_SCREEN
 
 /**
  * Screens used in [TaskItDestinations]
@@ -18,6 +20,7 @@ import com.godlike.taskit.TaskItScreens.TASKS_SCREEN
 private object TaskItScreens {
     const val AUTH_SCREEN = "auth"
     const val TASKS_SCREEN = "tasks"
+    const val UPCOMING_SCREEN = "upcoming"
     const val SEARCH_SCREEN = "search"
     const val SETTINGS_SCREEN = "settings"
     const val NEW_TASK_SCREEN = "newTask"
@@ -30,6 +33,7 @@ private object TaskItScreens {
 object TaskItDestinations {
     const val AUTH_ROUTE = AUTH_SCREEN
     const val TASKS_ROUTE = TASKS_SCREEN
+    const val UPCOMING_ROUTE = UPCOMING_SCREEN
     const val NEW_TASK_ROUTE = NEW_TASK_SCREEN
     const val SEARCH_ROUTE = SEARCH_SCREEN
     const val SETTINGS_ROUTE = SETTINGS_SCREEN
@@ -47,6 +51,9 @@ class TaskItNavigationActions(private val navController: NavHostController) {
     }
     fun navigateToTasks() {
         navController.navigate(TASKS_ROUTE)
+    }
+    fun navigateToUpcoming() {
+        navController.navigate(UPCOMING_ROUTE)
     }
     fun navigateToNewTask() {
         navController.navigate(NEW_TASK_ROUTE)

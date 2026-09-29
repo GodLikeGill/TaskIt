@@ -42,6 +42,7 @@ import com.godlike.taskit.util.NewTaskTopAppBar
 
 @Composable
 fun NewTaskScreen(
+    onBack: () -> Unit,
     onCreateTask: (Task) -> Unit,
     taskTitle: String = "",
     taskDescription: String = "",
@@ -57,7 +58,7 @@ fun NewTaskScreen(
             .padding(10.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
-        NewTaskTopAppBar()
+        NewTaskTopAppBar(onBackButtonPress = { onBack() })
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -136,7 +137,9 @@ fun NewTaskScreen(
                 color = Primary,
                 fontFamily = InterFontFamily,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.align(Alignment.CenterHorizontally)
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .clickable{ onBack() }
             )
         }
     }
@@ -145,5 +148,5 @@ fun NewTaskScreen(
 @Preview
 @Composable
 fun PreviewNewTaskScreen() {
-    NewTaskScreen(onCreateTask = {})
+    NewTaskScreen(onCreateTask = {}, onBack = {})
 }

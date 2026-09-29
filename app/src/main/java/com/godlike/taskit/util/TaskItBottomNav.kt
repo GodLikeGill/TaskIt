@@ -15,6 +15,7 @@ import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.AutoAwesome
+import androidx.compose.material.icons.outlined.CalendarMonth
 import androidx.compose.material.icons.outlined.Explore
 import androidx.compose.material.icons.outlined.PhotoLibrary
 import androidx.compose.material3.Icon
@@ -125,6 +126,7 @@ fun PreviewTaskItBottomNav() {
     TaskItBottomNav(
         items = listOf(
             BottomNavItem("gallery", "Gallery", Icons.Outlined.PhotoLibrary),
+            BottomNavItem("upcoming", "Upcoming", Icons.Outlined.CalendarMonth),
             BottomNavItem("cleanup", "Cleanup", Icons.Outlined.AutoAwesome),
             BottomNavItem("explore", "Explore", Icons.Outlined.Explore),
         ),
