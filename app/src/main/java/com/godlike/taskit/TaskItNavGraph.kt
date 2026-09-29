@@ -40,7 +40,8 @@ fun TaskItNavGraph(
         BottomNavItem(TaskItDestinations.SETTINGS_ROUTE, "Settings", Icons.Outlined.Settings),
     )
     Scaffold(
-        containerColor = Surface, bottomBar = {
+        containerColor = Surface,
+        bottomBar = {
             TaskItBottomNav(
                 items = items,
                 selectedRoute = items.firstOrNull { item -> currentDestination?.hierarchy?.any { it.route == item.route } == true }?.route,
@@ -57,7 +58,11 @@ fun TaskItNavGraph(
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen() }
+            composable(TaskItDestinations.TASKS_ROUTE) {
+                TasksScreen(
+                    onNewTaskButtonClick = { navActions.navigateToNewTask() }
+                )
+            }
             composable(TaskItDestinations.SEARCH_ROUTE) { }
             composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() }) }
         }

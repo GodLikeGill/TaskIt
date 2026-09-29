@@ -76,11 +76,13 @@ fun getDateList(): List<DateItem> {
 
 @Composable
 fun TasksScreen(
+    onNewTaskButtonClick: () -> Unit,
     viewModel: TasksViewModel = hiltViewModel()
 ) {
     val tasks by viewModel.tasks.collectAsState()
     TasksScreenContent(
         tasks,
+        onNewTaskButtonClick = { onNewTaskButtonClick() },
         onAddTask = { viewModel.onAddTask(it) },
         onDeleteTask = { viewModel.onDeleteTask(it) },
         onCheckedChange = { taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted) })
@@ -91,7 +93,8 @@ fun TasksScreenContent(
     tasks: List<Task>,
     onAddTask: (Task) -> Unit,
     onDeleteTask: (String) -> Unit,
-    onCheckedChange: (String, Boolean) -> Unit
+    onCheckedChange: (String, Boolean) -> Unit,
+    onNewTaskButtonClick: () -> Unit,
 ) {
     val dates = remember { getDateList() }
     var selectedIndex by remember { mutableIntStateOf(0) }
@@ -156,7 +159,7 @@ fun TasksScreenContent(
             }
         }
         Button(
-            onClick = {},
+            onClick = { onNewTaskButtonClick() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .shadow(
@@ -231,6 +234,7 @@ fun PreviewTasksScreenContent() {
         tasks = fakeTasks,
         onAddTask = {},
         onDeleteTask = {},
-        onCheckedChange = { _, _ -> }
+        onCheckedChange = { _, _ -> },
+        onNewTaskButtonClick = {},
     )
 }

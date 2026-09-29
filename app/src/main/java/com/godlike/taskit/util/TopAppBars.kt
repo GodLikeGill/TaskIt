@@ -13,14 +13,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +33,6 @@ import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.TextPrimary
 import com.godlike.taskit.ui.theme.TextSecondary
 import com.godlike.taskit.ui.theme.taskItRed
-import com.godlike.taskit.ui.theme.white
 
 @Composable
 fun TaskItTopAppBar() {
@@ -70,6 +68,57 @@ fun TasksTopAppBar() {
                 fontWeight = FontWeight.Bold,
             )
         }
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+@Composable
+fun NewTaskTopAppBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Image(
+            painter = painterResource(R.drawable.taskit_logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = stringResource(R.string.add_task),
+            fontSize = 20.sp,
+            color = TextPrimary,
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.weight(1f)
+        )
         Box(
             Modifier
                 .size(32.dp)
@@ -140,6 +189,12 @@ fun PreviewLoginTopAppBar() {
 @Composable
 fun PreviewTasksTopAppBar() {
     TasksTopAppBar()
+}
+
+@Preview
+@Composable
+fun PreviewNewTaskTopAppBar() {
+    NewTaskTopAppBar()
 }
 
 @Preview

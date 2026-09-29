@@ -3,8 +3,10 @@
     <string name="app_slogan">Note It. Plan It. Get It Done.</string>
     <string name="tasks">Tasks</string>
     <string name="add_task">Add Task</string>
+    <string name="create_task">Create Task</string>
+    <string name="discard_draft">Discard Draft</string>
     <string name="add_task_title">Add your task/reminder title</string>
-    <string name="description">description</string>
+    <string name="Description">Description</string>
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="log_in">Log In</string>

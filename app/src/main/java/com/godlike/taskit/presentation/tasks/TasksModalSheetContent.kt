@@ -57,9 +57,7 @@ fun ModalSheetContent(
             onValueChange = { taskTitle = it },
             modifier = Modifier.fillMaxWidth(),
             textStyle = TextStyle(
-                fontSize = 24.sp,
-                color = lightGray,
-                fontFamily = InterFontFamily
+                fontSize = 24.sp, color = lightGray, fontFamily = InterFontFamily
             ),
             decorationBox = { innerTextField ->
                 if (taskTitle.isEmpty()) Text(
@@ -75,13 +73,11 @@ fun ModalSheetContent(
             onValueChange = { taskDescription = it },
             modifier = Modifier.fillMaxWidth(),
             textStyle = TextStyle(
-                fontSize = 20.sp,
-                color = lightGray,
-                fontFamily = InterFontFamily
+                fontSize = 20.sp, color = lightGray, fontFamily = InterFontFamily
             ),
             decorationBox = { innerTextField ->
                 if (taskDescription.isEmpty()) Text(
-                    text = stringResource(R.string.description),
+                    text = stringResource(R.string.Description),
                     fontFamily = InterFontFamily,
                     color = darkGray,
                     fontSize = 16.sp
@@ -94,10 +90,13 @@ fun ModalSheetContent(
         ) {
             FilledIconButton(
                 onClick = {
-                    if (taskTitle.isNotEmpty() && taskDescription.isNotEmpty())
-                        onClose(Task(title = taskTitle, description = taskDescription))
-                },
-                colors = IconButtonDefaults.iconButtonColors(
+                    if (taskTitle.isNotEmpty() && taskDescription.isNotEmpty()) onClose(
+                        Task(
+                            title = taskTitle,
+                            description = taskDescription
+                        )
+                    )
+                }, colors = IconButtonDefaults.iconButtonColors(
                     containerColor = taskItRed,
                     contentColor = white,
                 )
