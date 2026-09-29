@@ -1,29 +1,34 @@
 package com.godlike.taskit.data.source.network
 
 import com.godlike.taskit.data.source.network.dto.TaskDto
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.snapshots
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.tasks.await
 
 class FirebaseDataSource(
     private val firestore: FirebaseFirestore
 ) {
+    // users/{uid}/tasks/{taskId}
+    private fun tasksCollection(uid: String): CollectionReference =
+        firestore.collection("users").document(uid).collection("tasks")
 
-    private val tasksCollection = firestore.collection("tasks")
+    fun getAllTasks(uid: String): Flow<List<TaskDto>> =
+        tasksCollection(uid).snapshots().map { snapshot ->
+            snapshot.documents.mapNotNull { it.toObject(TaskDto::class.java) }
+        }
 
-    fun getAllTasks() = tasksCollection.snapshots().map { snapshots ->
-        snapshots.documents.map { it.toObject(TaskDto::class.java) }
+    suspend fun addTask(uid: String, task: TaskDto) {
+        tasksCollection(uid).document(task.id).set(task).await()
     }
 
-    suspend fun addTask(task: TaskDto) {
-        tasksCollection.document(task.id).set(task)
+    suspend fun deleteTask(uid: String, taskId: String) {
+        tasksCollection(uid).document(taskId).delete().await()
     }
 
-    suspend fun deleteTask(taskId: String) {
-        tasksCollection.document(taskId).delete()
-    }
-
-    suspend fun completeTask(taskId: String, isCompleted: Boolean) {
-        tasksCollection.document(taskId).update("isCompleted", isCompleted)
+    suspend fun completeTask(uid: String, taskId: String, isCompleted: Boolean) {
+        tasksCollection(uid).document(taskId).update("isCompleted", isCompleted).await()
     }
 }

@@ -10,5 +10,5 @@ data class TaskDto(
 
     @get:PropertyName("isCompleted")
     @set:PropertyName("isCompleted")
-    var isCompleted: Boolean,
+    var isCompleted: Boolean = false,
 )
