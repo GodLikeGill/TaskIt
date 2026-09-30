@@ -96,9 +96,9 @@ fun SettingsScreenContent(onLogoutButtonClick: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
+                        .clickable {}
                         .background(color = Primary)
-                        .padding(10.dp)
-                        .clickable {},
+                        .padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(
                         space = 10.dp,
                         alignment = Alignment.CenterHorizontally

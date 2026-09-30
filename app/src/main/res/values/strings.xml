@@ -32,4 +32,6 @@
     <string name="account">Account</string>
     <string name="logout">Log out</string>
     <string name="remember_me">Remember me</string>
+    <string name="search">Search</string>
+    <string name="upcoming">Upcoming</string>
 </resources>

@@ -107,15 +107,16 @@ fun NewTaskScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .clip(shape = RoundedCornerShape(10.dp))
-                    .background(color = Primary)
-                    .padding(10.dp)
                     .clickable {
                         onCreateTask(
                             Task(
                                 title = taskTitle, description = taskDescription
                             )
                         )
-                    }, horizontalArrangement = Arrangement.spacedBy(
+                    }
+                    .background(color = Primary)
+                    .padding(10.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
                     space = 10.dp, alignment = Alignment.CenterHorizontally
                 ), verticalAlignment = Alignment.CenterVertically
             ) {

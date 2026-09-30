@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -23,7 +22,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -31,11 +29,6 @@ import com.godlike.taskit.R
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.TextPrimary
 import com.godlike.taskit.ui.theme.TextSecondary
-import com.godlike.taskit.ui.theme.taskItRed
-
-@Composable
-fun TaskItTopAppBar() {
-}
 
 @Composable
 fun TasksTopAppBar() {
@@ -136,23 +129,100 @@ fun NewTaskTopAppBar(onBackButtonPress: () -> Unit) {
 }
 
 @Composable
-fun LoginTopAppBar() {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+fun UpcomingTopAppBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
-        Text(
-            text = stringResource(R.string.app_name),
-            modifier = Modifier.fillMaxWidth(),
-            textAlign = TextAlign.Center,
-            color = taskItRed,
-            fontSize = 32.sp,
-            fontWeight = FontWeight.Bold,
-            fontFamily = InterFontFamily,
+        Image(
+            painter = painterResource(R.drawable.taskit_logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(40.dp)
         )
+        Column(
+            Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.app_name),
+                fontSize = 20.sp,
+                color = TextPrimary,
+                fontFamily = InterFontFamily,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = stringResource(R.string.upcoming).uppercase(),
+                fontSize = 10.sp,
+                color = TextSecondary,
+                fontFamily = InterFontFamily,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
     }
 }
+
+@Composable
+fun SearchTopAppBar() {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Image(
+            painter = painterResource(R.drawable.taskit_logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(40.dp)
+        )
+        Column(
+            Modifier.weight(1f)
+        ) {
+            Text(
+                text = stringResource(R.string.app_name),
+                fontSize = 20.sp,
+                color = TextPrimary,
+                fontFamily = InterFontFamily,
+                fontWeight = FontWeight.SemiBold,
+            )
+            Text(
+                text = stringResource(R.string.search).uppercase(),
+                fontSize = 10.sp,
+                color = TextSecondary,
+                fontFamily = InterFontFamily,
+                fontWeight = FontWeight.Bold,
+            )
+        }
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
+
 
 @Composable
 fun SettingsTopAppBar() {
@@ -203,12 +273,6 @@ fun SettingsTopAppBar() {
 
 @Preview
 @Composable
-fun PreviewLoginTopAppBar() {
-    LoginTopAppBar()
-}
-
-@Preview
-@Composable
 fun PreviewTasksTopAppBar() {
     TasksTopAppBar()
 }
@@ -217,6 +281,18 @@ fun PreviewTasksTopAppBar() {
 @Composable
 fun PreviewNewTaskTopAppBar() {
     NewTaskTopAppBar {}
+}
+
+@Preview
+@Composable
+fun PreviewUpcomingTopAppBar() {
+    UpcomingTopAppBar()
+}
+
+@Preview
+@Composable
+fun PreviewSearchTopAppBar() {
+    SearchTopAppBar()
 }
 
 @Preview

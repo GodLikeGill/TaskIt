@@ -19,10 +19,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.godlike.taskit.presentation.search.SearchScreen
 import com.godlike.taskit.presentation.setting.SettingsScreen
 import com.godlike.taskit.presentation.tasks.NewTaskScreen
 import com.godlike.taskit.presentation.tasks.TasksScreen
 import com.godlike.taskit.presentation.tasks.TasksViewModel
+import com.godlike.taskit.presentation.upcoming.UpcomingScreen
 import com.godlike.taskit.ui.theme.Surface
 import com.godlike.taskit.util.BottomNavItem
 import com.godlike.taskit.util.TaskItBottomNav
@@ -69,8 +71,8 @@ fun TaskItNavGraph(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() }) }
-            composable(TaskItDestinations.UPCOMING_ROUTE) { }
-            composable(TaskItDestinations.SEARCH_ROUTE) { }
+            composable(TaskItDestinations.UPCOMING_ROUTE) { UpcomingScreen() }
+            composable(TaskItDestinations.SEARCH_ROUTE) { SearchScreen() }
             composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() }) }
             composable(TaskItDestinations.NEW_TASK_ROUTE) {
                 val viewModel: TasksViewModel = hiltViewModel()
