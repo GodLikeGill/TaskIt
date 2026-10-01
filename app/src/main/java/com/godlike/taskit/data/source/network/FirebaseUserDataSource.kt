@@ -13,6 +13,6 @@ class FirebaseUserDataSource(
         usersCollection.document(uid).get().await().toObject(UserDto::class.java)
 
     suspend fun upsertUser(user: UserDto) {
-        usersCollection.document(user.uid).set(user)
+        usersCollection.document(user.uid).set(user).await()
     }
 }

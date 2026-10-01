@@ -3,6 +3,7 @@ package com.godlike.taskit.data.source.network
 import com.godlike.taskit.data.source.network.dto.TaskDto
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.snapshots
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -14,6 +15,13 @@ class FirebaseDataSource(
     // users/{uid}/tasks/{taskId}
     private fun tasksCollection(uid: String): CollectionReference =
         firestore.collection("users").document(uid).collection("tasks")
+
+    suspend fun getTasks(uid: String): List<TaskDto> =
+        tasksCollection(uid)
+            .get(Source.SERVER)
+            .await()
+            .documents
+            .mapNotNull { it.toObject(TaskDto::class.java) }
 
     fun getAllTasks(uid: String): Flow<List<TaskDto>> =
         tasksCollection(uid).snapshots().map { snapshot ->

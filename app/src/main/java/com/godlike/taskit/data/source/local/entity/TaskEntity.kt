@@ -10,4 +10,7 @@ data class TaskEntity (
     var title: String = "",
     var description: String = "",
     var isCompleted: Boolean = false,
+    val updatedAt: Long = 0L,
+    val isDeleted: Boolean = false,
+    val syncState: SyncState = SyncState.PENDING,
 )

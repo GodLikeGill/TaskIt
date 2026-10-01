@@ -11,4 +11,5 @@ data class TaskDto(
     @get:PropertyName("isCompleted")
     @set:PropertyName("isCompleted")
     var isCompleted: Boolean = false,
+    val updatedAt: Long = 0L,
 )

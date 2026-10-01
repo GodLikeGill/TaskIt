@@ -1,8 +1,5 @@
 package com.godlike.taskit.domain.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.google.firebase.firestore.PropertyName
 import java.util.UUID
 
 data class Task (
