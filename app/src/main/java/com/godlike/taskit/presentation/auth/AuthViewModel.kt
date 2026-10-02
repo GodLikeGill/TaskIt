@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.godlike.taskit.domain.model.User
 import com.godlike.taskit.domain.usecase.user.CurrentUserUseCase
 import com.godlike.taskit.domain.usecase.user.LoginUseCase
+import com.godlike.taskit.domain.usecase.user.LogoutResult
 import com.godlike.taskit.domain.usecase.user.LogoutUseCase
 import com.godlike.taskit.domain.usecase.user.RegisterUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +31,9 @@ class AuthViewModel @Inject constructor(
 
     private val _authState = MutableStateFlow<AuthState>(AuthState.Idle)
     val authState: StateFlow<AuthState> = _authState
+
+    private val _unsyncedCount = MutableStateFlow<Int?>(null)
+    val unsyncedCount: StateFlow<Int?> = _unsyncedCount
 
     private fun executeAuth(block: suspend () -> Result<User?>) {
         viewModelScope.launch {
@@ -61,10 +65,17 @@ class AuthViewModel @Inject constructor(
         executeAuth { currentUserUseCase() }
     }
 
-    fun logout() {
+    fun logout(force: Boolean = false) {
         viewModelScope.launch {
-            logoutUseCase()
-            _authState.value = AuthState.Idle
+            when (val result = logoutUseCase(force)) {
+                LogoutResult.LoggedOut -> {
+                    _unsyncedCount.value = null
+                    _authState.value = AuthState.Idle
+                }
+                is LogoutResult.UnsyncedTasks -> _unsyncedCount.value = result.count
+            }
         }
     }
+
+    fun dismissLogoutWarning() { _unsyncedCount.value = null }
 }

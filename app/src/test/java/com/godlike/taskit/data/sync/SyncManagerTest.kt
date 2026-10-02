@@ -138,4 +138,17 @@ class SyncManagerTest {
         coVerify(exactly = 0) { local.deleteById(any()) }
         coVerify(exactly = 0) { local.upsertTask(any()) }
     }
+
+    @Test
+    fun `pushBeforeLogout returns remaining count when upload fails and does not throw`() = runTest {
+        val task = TaskEntity(id = "1", title = "Milk", updatedAt = 100L)
+        coEvery { local.getBySyncState(SyncState.PENDING) } returns listOf(task)
+        coEvery { remote.addTask("uid", any()) } throws RuntimeException("Offline")
+        coEvery { local.countLiveBySyncState(SyncState.PENDING) } returns 1
+
+        val remaining = syncManager.pushBeforeLogout("uid")
+
+        assertEquals(1, remaining)
+        coVerify(exactly = 0) { local.markSynced(any(), any(), any()) }
+    }
 }

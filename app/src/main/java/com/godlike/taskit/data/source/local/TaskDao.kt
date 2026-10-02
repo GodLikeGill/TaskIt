@@ -16,6 +16,9 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE id = :taskId AND isDeleted = 0")
     fun observeById(taskId: String): Flow<TaskEntity?>
 
+    @Query("SELECT * FROM task WHERE syncState = :state")
+    fun observeBySyncState(state: SyncState): Flow<List<TaskEntity>>
+
     @Query("SELECT * FROM task")
     suspend fun getAll(): List<TaskEntity>
 
@@ -39,4 +42,7 @@ interface TaskDao {
 
     @Query("UPDATE task SET syncState = :synced WHERE id = :taskId AND updatedAt = :updatedAt")
     suspend fun markSynced(taskId: String, updatedAt: Long, synced: SyncState = SyncState.SYNCED)
+
+    @Query("SELECT COUNT(*) FROM task WHERE syncState = :state AND isDeleted = 0")
+    suspend fun countLiveBySyncState(state: SyncState): Int
 }

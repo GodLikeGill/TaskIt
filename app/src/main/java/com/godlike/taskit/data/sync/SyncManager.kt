@@ -4,8 +4,11 @@ import com.godlike.taskit.data.mapper.toDto
 import com.godlike.taskit.data.mapper.toEntity
 import com.godlike.taskit.data.source.local.TaskDao
 import com.godlike.taskit.data.source.local.entity.SyncState
+import com.godlike.taskit.data.source.local.entity.TaskEntity
 import com.godlike.taskit.data.source.network.FirebaseDataSource
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
+import kotlin.coroutines.cancellation.CancellationException
 
 class SyncManager @Inject constructor(
     private val local: TaskDao,
@@ -38,6 +41,20 @@ class SyncManager @Inject constructor(
         localById.values
             .filter { it.syncState == SyncState.SYNCED && it.id !in remoteIds }
             .forEach { local.deleteById(it.id) }
+    }
+
+    fun observePending(): Flow<List<TaskEntity>> =
+        local.observeBySyncState(SyncState.PENDING)
+
+    suspend fun pushBeforeLogout(uid: String): Int {
+        try {
+            pushPending(uid)
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            // Offline or a failed upload: the count below tells the caller what is left.
+        }
+        return local.countLiveBySyncState(SyncState.PENDING)
     }
 
     suspend fun sync(uid: String) {

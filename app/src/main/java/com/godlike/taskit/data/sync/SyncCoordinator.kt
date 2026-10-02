@@ -5,7 +5,9 @@ import com.godlike.taskit.data.repository.AuthRepository
 import com.godlike.taskit.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -22,16 +24,25 @@ class SyncCoordinator @Inject constructor(
             authRepository.observeUser()
                 .distinctUntilChanged { old, new -> old?.uid == new?.uid }
                 .collectLatest { user ->
-                    if (user != null) {
-                        try {
-                            syncManager.sync(user.uid)
-                        } catch (e: CancellationException) {
-                            throw e
-                        } catch (e: Exception) {
-                            Log.w("SyncCoordinator", "Sync failed", e)
-                        }
-                    }
+                    if (user == null) return@collectLatest
+
+                    runSafely { syncManager.sync(user.uid) }
+
+                    syncManager.observePending()
+                        .filter { it.isNotEmpty() }
+                        .conflate()
+                        .collect { runSafely { syncManager.pushPending(user.uid) } }
                 }
+        }
+    }
+
+    private suspend fun runSafely(block: suspend () -> Unit) {
+        try {
+            block()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.w("SyncCoordinator", "Sync failed", e)
         }
     }
 }
