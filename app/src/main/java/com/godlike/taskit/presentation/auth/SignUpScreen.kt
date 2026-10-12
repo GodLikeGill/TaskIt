@@ -29,6 +29,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.godlike.taskit.R
 import com.godlike.taskit.ui.theme.Primary
 import com.godlike.taskit.ui.theme.PrimaryDark
@@ -60,18 +62,35 @@ import com.godlike.taskit.ui.theme.TextSecondary
 import com.godlike.taskit.util.SignInTopAppBar
 
 @Composable
-fun SignUpScreen() {
-    SignUpScreenContent()
+fun SignUpScreen(
+    onBackButtonClick: () -> Unit,
+    onSignInButtonClick: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
+) {
+    SignUpScreenContent(
+        onBackButtonClick = onBackButtonClick,
+        onSignInButtonClick = onSignInButtonClick,
+        onSignUpButtonClick = onSignUpButtonClick
+    )
 }
 
 @Composable
-fun SignUpScreenContent() {
+fun SignUpScreenContent(
+    onBackButtonClick: () -> Unit,
+    onSignInButtonClick: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel(),
+) {
+
+    val authState by viewModel.authState.collectAsState()
 
     var name by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isChecked by remember { mutableStateOf(false) }
+
+    val isFormValid = name.isNotBlank() && email.isNotBlank() && password.isNotBlank() && isChecked
 
     Box(
         Modifier
@@ -83,7 +102,7 @@ fun SignUpScreenContent() {
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
-            SignInTopAppBar(onBackButtonPress = {})
+            SignInTopAppBar(onBackButtonPress = onBackButtonClick)
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -92,8 +111,8 @@ fun SignUpScreenContent() {
                 Box(contentAlignment = Alignment.Center) {
                     Box(
                         modifier = Modifier
-                            .size(160.dp)
-                            .blur(40.dp)
+                            .size(120.dp)
+                            .blur(30.dp)
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
@@ -105,7 +124,7 @@ fun SignUpScreenContent() {
                     Image(
                         painter = painterResource(R.drawable.taskit_logo),
                         contentDescription = "logo",
-                        modifier = Modifier.size(75.dp)
+                        modifier = Modifier.size(50.dp)
                     )
                 }
 
@@ -153,13 +172,17 @@ fun SignUpScreenContent() {
                 horizontalArrangement = Arrangement.spacedBy(5.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                HorizontalDivider(modifier = Modifier
-                    .weight(1f)
-                    .height(0.1.dp), color = PrimaryLow)
+                HorizontalDivider(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(0.1.dp), color = PrimaryLow
+                )
                 Text(text = "or register with email", color = PrimaryLow)
-                HorizontalDivider(modifier = Modifier
-                    .weight(1f)
-                    .height(0.1.dp), color = PrimaryLow)
+                HorizontalDivider(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(0.1.dp), color = PrimaryLow
+                )
             }
             Column {
                 Text(
@@ -297,7 +320,6 @@ fun SignUpScreenContent() {
                     )
                 }
             } // Password Field
-
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Box(
                     modifier = Modifier
@@ -305,7 +327,8 @@ fun SignUpScreenContent() {
                         .background(
                             color = if (isChecked) Primary else SurfaceContainer,
                             shape = RoundedCornerShape(6.dp)
-                        ),
+                        )
+                        .clickable { isChecked = !isChecked },
                     contentAlignment = Alignment.Center
                 ) {
                     if (isChecked) {
@@ -325,7 +348,6 @@ fun SignUpScreenContent() {
                     fontFamily = Roboto
                 )
             }
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -333,9 +355,14 @@ fun SignUpScreenContent() {
                         color = Primary,
                         shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable { }
+                    .clickable {
+                        onSignUpButtonClick()
+                    }
                     .padding(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
+                horizontalArrangement = Arrangement.spacedBy(
+                    10.dp,
+                    Alignment.CenterHorizontally
+                ),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -351,7 +378,6 @@ fun SignUpScreenContent() {
                     modifier = Modifier.size(24.dp)
                 )
             }
-
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
@@ -366,7 +392,8 @@ fun SignUpScreenContent() {
                     text = "Sign In",
                     color = Primary,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.clickable { onSignInButtonClick() }
                 )
             }
         }
@@ -376,5 +403,9 @@ fun SignUpScreenContent() {
 @Preview
 @Composable
 fun PreviewSignUpScreenContent() {
-    SignUpScreenContent()
+    SignUpScreenContent(
+        onBackButtonClick = {},
+        onSignInButtonClick = {},
+        onSignUpButtonClick = {},
+    )
 }

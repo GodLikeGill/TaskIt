@@ -19,6 +19,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.godlike.taskit.presentation.auth.SignInScreen
+import com.godlike.taskit.presentation.auth.SignUpScreen
 import com.godlike.taskit.presentation.search.SearchScreen
 import com.godlike.taskit.presentation.setting.SettingsScreen
 import com.godlike.taskit.presentation.tasks.NewTaskScreen
@@ -47,8 +49,7 @@ fun TaskItNavGraph(
         BottomNavItem(TaskItDestinations.SETTINGS_ROUTE, "Settings", Icons.Outlined.Settings),
     )
     Scaffold(
-        containerColor = Surface,
-        bottomBar = {
+        containerColor = Surface, bottomBar = {
             if (currentDestination?.route != TaskItDestinations.NEW_TASK_ROUTE) {
                 TaskItBottomNav(
                     items = items,
@@ -61,8 +62,7 @@ fun TaskItNavGraph(
                             launchSingleTop = true
                             restoreState = true
                         }
-                    }
-                )
+                    })
             }
         }) { innerPadding ->
         NavHost(
@@ -73,16 +73,25 @@ fun TaskItNavGraph(
             composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() }) }
             composable(TaskItDestinations.UPCOMING_ROUTE) { UpcomingScreen() }
             composable(TaskItDestinations.SEARCH_ROUTE) { SearchScreen() }
-            composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onLogoutButtonClick = { navActions.navigateToAuth() }) }
+            composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onSignInButtonClick = { navActions.navigateToSignIn() }) }
+            composable(TaskItDestinations.SIGN_IN_ROUTE) {
+                SignInScreen(
+                    onSignUpButtonClick = { navActions.navigateToSignUp() },
+                )
+            }
+            composable(TaskItDestinations.SIGN_UP_ROUTE) {
+                SignUpScreen(
+                    onBackButtonClick = { navController.popBackStack() },
+                    onSignInButtonClick = { navActions.navigateToSignIn() },
+                    onSignUpButtonClick = { navActions.navigateToTasks() }
+                )
+            }
             composable(TaskItDestinations.NEW_TASK_ROUTE) {
                 val viewModel: TasksViewModel = hiltViewModel()
-                NewTaskScreen(
-                    onCreateTask = { task ->
-                        viewModel.onAddTask(task)
-                        navController.popBackStack()
-                    },
-                    onBack = { navController.popBackStack() }
-                )
+                NewTaskScreen(onCreateTask = { task ->
+                    viewModel.onAddTask(task)
+                    navController.popBackStack()
+                }, onBack = { navController.popBackStack() })
             }
         }
     }

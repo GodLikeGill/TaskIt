@@ -28,6 +28,7 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.godlike.taskit.R
 import com.godlike.taskit.ui.theme.Primary
 import com.godlike.taskit.ui.theme.PrimaryDark
@@ -59,17 +61,27 @@ import com.godlike.taskit.ui.theme.TextSecondary
 import com.godlike.taskit.util.SignInTopAppBar
 
 @Composable
-fun SignInScreen() {
-    SignInScreenContent()
+fun SignInScreen(
+    onSignUpButtonClick: () -> Unit
+) {
+    SignInScreenContent(
+        onSignUpButtonClick = onSignUpButtonClick
+    )
 }
 
 @Composable
-fun SignInScreenContent() {
+fun SignInScreenContent(
+    onSignUpButtonClick: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel(),
+) {
+    val authState by viewModel.authState.collectAsState()
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var checked by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
+
+    val isFormValid = email.isNotBlank() && password.isNotBlank()
 
     Box(
         Modifier
@@ -90,8 +102,8 @@ fun SignInScreenContent() {
                 Box(contentAlignment = Alignment.Center) {
                     Box(
                         modifier = Modifier
-                            .size(160.dp)
-                            .blur(40.dp)
+                            .size(120.dp)
+                            .blur(30.dp)
                             .background(
                                 brush = Brush.radialGradient(
                                     colors = listOf(
@@ -103,7 +115,7 @@ fun SignInScreenContent() {
                     Image(
                         painter = painterResource(R.drawable.taskit_logo),
                         contentDescription = "logo",
-                        modifier = Modifier.size(75.dp)
+                        modifier = Modifier.size(50.dp)
                     )
                 }
 
@@ -314,7 +326,8 @@ fun SignInScreenContent() {
                     text = "Create Account",
                     color = Primary,
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.clickable { onSignUpButtonClick() }
                 )
             }
             Row(
@@ -336,5 +349,5 @@ fun SignInScreenContent() {
 @Preview
 @Composable
 fun PreviewSignInScreenContent() {
-    SignInScreenContent()
+    SignInScreenContent(onSignUpButtonClick = {})
 }

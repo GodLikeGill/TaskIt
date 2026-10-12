@@ -35,12 +35,12 @@ import com.godlike.taskit.ui.theme.TextPrimary
 import com.godlike.taskit.util.SettingsTopAppBar
 
 @Composable
-fun SettingsScreen(onLogoutButtonClick: () -> Unit) {
-    SettingsScreenContent(onLogoutButtonClick = onLogoutButtonClick)
+fun SettingsScreen(onSignInButtonClick: () -> Unit) {
+    SettingsScreenContent(onSignInButtonClick = onSignInButtonClick)
 }
 
 @Composable
-fun SettingsScreenContent(onLogoutButtonClick: () -> Unit) {
+fun SettingsScreenContent(onSignInButtonClick: () -> Unit) {
     Column(
         Modifier
             .fillMaxSize()
@@ -96,8 +96,8 @@ fun SettingsScreenContent(onLogoutButtonClick: () -> Unit) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .clip(shape = RoundedCornerShape(15.dp))
-                        .clickable {}
                         .background(color = Primary)
+                        .clickable { onSignInButtonClick() }
                         .padding(10.dp),
                     horizontalArrangement = Arrangement.spacedBy(
                         space = 10.dp,
@@ -131,5 +131,5 @@ fun SettingsScreenContent(onLogoutButtonClick: () -> Unit) {
 @Preview
 @Composable
 fun PreviewSettingsScreen() {
-    SettingsScreen(onLogoutButtonClick = {})
+    SettingsScreen(onSignInButtonClick = {})
 }
