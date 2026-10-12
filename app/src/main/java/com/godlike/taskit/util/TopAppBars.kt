@@ -271,6 +271,57 @@ fun SettingsTopAppBar() {
     }
 }
 
+@Composable
+fun SignInTopAppBar(onBackButtonPress: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = { onBackButtonPress() }),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Image(
+            painter = painterResource(R.drawable.taskit_logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = stringResource(R.string.sign_in),
+            fontSize = 20.sp,
+            color = TextPrimary,
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.weight(1f)
+        )
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewTasksTopAppBar() {
@@ -299,4 +350,10 @@ fun PreviewSearchTopAppBar() {
 @Composable
 fun PreviewSettingsTopAppBar() {
     SettingsTopAppBar()
+}
+
+@Preview
+@Composable
+fun PreviewSignInTopAppBar() {
+    SignInTopAppBar {}
 }

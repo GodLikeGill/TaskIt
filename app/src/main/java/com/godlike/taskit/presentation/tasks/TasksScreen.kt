@@ -83,7 +83,6 @@ fun TasksScreen(
     TasksScreenContent(
         tasks,
         onNewTaskButtonClick = { onNewTaskButtonClick() },
-        onAddTask = { viewModel.onAddTask(it) },
         onDeleteTask = { viewModel.onDeleteTask(it) },
         onCheckedChange = { taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted) })
 }
@@ -91,7 +90,6 @@ fun TasksScreen(
 @Composable
 fun TasksScreenContent(
     tasks: List<Task>,
-    onAddTask: (Task) -> Unit,
     onDeleteTask: (String) -> Unit,
     onCheckedChange: (String, Boolean) -> Unit,
     onNewTaskButtonClick: () -> Unit,
@@ -232,7 +230,6 @@ fun PreviewTasksScreenContent() {
 
     TasksScreenContent(
         tasks = fakeTasks,
-        onAddTask = {},
         onDeleteTask = {},
         onCheckedChange = { _, _ -> },
         onNewTaskButtonClick = {},
