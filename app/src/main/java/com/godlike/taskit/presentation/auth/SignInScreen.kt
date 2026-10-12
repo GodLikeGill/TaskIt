@@ -307,7 +307,7 @@ fun SignInScreenContent() {
             ) {
                 Text(
                     text = "Don't have an account?",
-                    color = TextPrimary,
+                    color = PrimaryLow,
                     fontSize = 14.sp
                 )
                 Text(
