@@ -22,12 +22,14 @@ import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +41,7 @@ import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -62,19 +65,33 @@ import com.godlike.taskit.util.SignInTopAppBar
 
 @Composable
 fun SignInScreen(
-    onSignUpButtonClick: () -> Unit
-) {
-    SignInScreenContent(
-        onSignUpButtonClick = onSignUpButtonClick
-    )
-}
-
-@Composable
-fun SignInScreenContent(
+    onAuthSuccess: () -> Unit,
+    onBackButtonClick: () -> Unit,
     onSignUpButtonClick: () -> Unit,
     viewModel: AuthViewModel = hiltViewModel(),
 ) {
     val authState by viewModel.authState.collectAsState()
+
+    SignInScreenContent(
+        authState = authState,
+        onBackButtonClick = onBackButtonClick,
+        onSignUpButtonClick = onSignUpButtonClick,
+        onSignInButtonClick = { email, password ->
+            viewModel.login(email = email, password = password)
+        })
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) onAuthSuccess()
+    }
+}
+
+@Composable
+fun SignInScreenContent(
+    authState: AuthState,
+    onBackButtonClick: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
+    onSignInButtonClick: (String, String) -> Unit,
+) {
 
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
@@ -93,7 +110,7 @@ fun SignInScreenContent(
             Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.spacedBy(15.dp),
         ) {
-            SignInTopAppBar(onBackButtonPress = {})
+            SignInTopAppBar(onBackButtonPress = onBackButtonClick)
 
             Column(
                 verticalArrangement = Arrangement.spacedBy(10.dp),
@@ -138,14 +155,14 @@ fun SignInScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            shape = RoundedCornerShape(10.dp),
-                            color = SurfaceContainer
+                            shape = RoundedCornerShape(10.dp), color = SurfaceContainer
                         )
                         .clickable {}
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
-                ) {
+                    horizontalArrangement = Arrangement.spacedBy(
+                        5.dp, Alignment.CenterHorizontally
+                    )) {
                     Image(
                         painter = painterResource(R.drawable.google_logo),
                         contentDescription = "",
@@ -169,15 +186,13 @@ fun SignInScreenContent(
             }
             Column {
                 Text(
-                    text = "Email Address",
-                    color = TextSecondary
+                    text = "Email Address", color = TextSecondary
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = SurfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+                            color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -193,15 +208,15 @@ fun SignInScreenContent(
                         value = email,
                         onValueChange = { email = it },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
+                            keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
+                        ),
+                        textStyle = TextStyle(
+                            color = PrimaryLow, fontSize = 14.sp, fontFamily = Roboto
                         ),
                         decorationBox = { innerTextField ->
                             if (email.isEmpty()) {
                                 Text(
-                                    text = "name@example.com",
-                                    color = PrimaryLow,
-                                    fontSize = 14.sp
+                                    text = "name@example.com", color = PrimaryLow, fontSize = 14.sp
                                 )
                             }
                             innerTextField()
@@ -224,8 +239,7 @@ fun SignInScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = SurfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+                            color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -241,6 +255,9 @@ fun SignInScreenContent(
                         value = password,
                         onValueChange = { password = it },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+                        textStyle = TextStyle(
+                            color = PrimaryLow, fontSize = 14.sp, fontFamily = Roboto
+                        ),
                         decorationBox = { innerTextField ->
                             if (password.isEmpty()) {
                                 Text(
@@ -283,22 +300,21 @@ fun SignInScreenContent(
                 )
                 Spacer(Modifier.width(10.dp))
                 Text(
-                    text = "Stay signed in for 30 days",
-                    color = PrimaryLow
+                    text = "Stay signed in for 30 days", color = PrimaryLow
                 )
             }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = Primary,
-                        shape = RoundedCornerShape(12.dp)
+                        color = Primary, shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable { }
+                    .clickable(enabled = isFormValid) {
+                        onSignInButtonClick(email, password)
+                    }
                     .padding(10.dp),
                 horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Sign in".uppercase(),
                     color = PrimaryDark,
@@ -312,23 +328,39 @@ fun SignInScreenContent(
                     modifier = Modifier.size(24.dp)
                 )
             }
+            when (authState) {
+                is AuthState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally), color = Primary
+                    )
+                }
+
+                is AuthState.Error -> {
+                    Text(
+                        text = authState.message,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .padding(top = 40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                else -> {}
+            }
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
             ) {
                 Text(
-                    text = "Don't have an account?",
-                    color = PrimaryLow,
-                    fontSize = 14.sp
+                    text = "Don't have an account?", color = PrimaryLow, fontSize = 14.sp
                 )
                 Text(
                     text = "Create Account",
                     color = Primary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.clickable { onSignUpButtonClick() }
-                )
+                    modifier = Modifier.clickable { onSignUpButtonClick() })
             }
             Row(
                 Modifier
@@ -349,5 +381,10 @@ fun SignInScreenContent(
 @Preview
 @Composable
 fun PreviewSignInScreenContent() {
-    SignInScreenContent(onSignUpButtonClick = {})
+    SignInScreenContent(
+        authState = AuthState.Idle,
+        onBackButtonClick = {},
+        onSignUpButtonClick = {},
+        onSignInButtonClick = { _, _ -> },
+    )
 }

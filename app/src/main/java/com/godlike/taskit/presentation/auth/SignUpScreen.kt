@@ -25,10 +25,12 @@ import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material.icons.outlined.Visibility
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,34 +65,45 @@ import com.godlike.taskit.util.SignInTopAppBar
 
 @Composable
 fun SignUpScreen(
+    onAuthSuccess: () -> Unit,
     onBackButtonClick: () -> Unit,
     onSignInButtonClick: () -> Unit,
-    onSignUpButtonClick: () -> Unit,
+    viewModel: AuthViewModel = hiltViewModel()
 ) {
+    val authState by viewModel.authState.collectAsState()
+
     SignUpScreenContent(
+        authState = authState,
         onBackButtonClick = onBackButtonClick,
         onSignInButtonClick = onSignInButtonClick,
-        onSignUpButtonClick = onSignUpButtonClick
-    )
+        onSignUpButtonClick = { firstName, lastName, email, password ->
+            viewModel.register(
+                firstName = firstName, lastName = lastName, email = email, password = password
+            )
+        })
+
+    LaunchedEffect(authState) {
+        if (authState is AuthState.Success) onAuthSuccess()
+    }
 }
 
 @Composable
 fun SignUpScreenContent(
+    authState: AuthState,
     onBackButtonClick: () -> Unit,
     onSignInButtonClick: () -> Unit,
-    onSignUpButtonClick: () -> Unit,
-    viewModel: AuthViewModel = hiltViewModel(),
+    onSignUpButtonClick: (String, String, String, String) -> Unit,
 ) {
 
-    val authState by viewModel.authState.collectAsState()
-
-    var name by remember { mutableStateOf("") }
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isChecked by remember { mutableStateOf(false) }
 
-    val isFormValid = name.isNotBlank() && email.isNotBlank() && password.isNotBlank() && isChecked
+    val isFormValid =
+        firstName.isNotBlank() && lastName.isNotBlank() && email.isNotBlank() && password.isNotBlank() && isChecked
 
     Box(
         Modifier
@@ -147,14 +160,14 @@ fun SignUpScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            shape = RoundedCornerShape(10.dp),
-                            color = SurfaceContainer
+                            shape = RoundedCornerShape(10.dp), color = SurfaceContainer
                         )
                         .clickable {}
                         .padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
-                ) {
+                    horizontalArrangement = Arrangement.spacedBy(
+                        5.dp, Alignment.CenterHorizontally
+                    )) {
                     Image(
                         painter = painterResource(R.drawable.google_logo),
                         contentDescription = "",
@@ -184,60 +197,96 @@ fun SignUpScreenContent(
                         .height(0.1.dp), color = PrimaryLow
                 )
             }
-            Column {
-                Text(
-                    text = "Full Name",
-                    color = TextSecondary
-                )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(
-                            color = SurfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp),
+            ) {
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = "First Name", color = TextSecondary
+                    )
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(horizontal = 16.dp, vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = "Name Icon",
+                            tint = PrimaryLow,
+                            modifier = Modifier.size(24.dp)
                         )
-                        .padding(horizontal = 16.dp, vertical = 16.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        imageVector = Icons.Outlined.Person,
-                        contentDescription = "Name Icon",
-                        tint = PrimaryLow,
-                        modifier = Modifier.size(24.dp)
+                        Spacer(modifier = Modifier.width(12.dp))
+                        BasicTextField(
+                            value = firstName,
+                            onValueChange = { firstName = it },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.PersonName, imeAction = ImeAction.Next
+                            ),
+                            decorationBox = { innerTextField ->
+                                if (firstName.isEmpty()) {
+                                    Text(
+                                        text = "e.g. John", color = PrimaryLow, fontSize = 14.sp
+                                    )
+                                }
+                                innerTextField()
+                            },
+                        )
+                    }
+                } // First name Field
+                Column(Modifier.weight(1f)) {
+                    Text(
+                        text = "Last Name", color = TextSecondary
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    BasicTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.PersonName,
-                            imeAction = ImeAction.Next
-                        ),
-                        decorationBox = { innerTextField ->
-                            if (name.isEmpty()) {
-                                Text(
-                                    text = "e.g. John Doe",
-                                    color = PrimaryLow,
-                                    fontSize = 14.sp
-                                )
-                            }
-                            innerTextField()
-                        },
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-            } // Name Field
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .background(
+                                color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
+                            )
+                            .padding(horizontal = 16.dp, vertical = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Outlined.Person,
+                            contentDescription = "Name Icon",
+                            tint = PrimaryLow,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        BasicTextField(
+                            value = lastName,
+                            onValueChange = { lastName = it },
+                            keyboardOptions = KeyboardOptions(
+                                keyboardType = KeyboardType.PersonName, imeAction = ImeAction.Next
+                            ),
+                            decorationBox = { innerTextField ->
+                                if (lastName.isEmpty()) {
+                                    Text(
+                                        text = "e.g. Doe", color = PrimaryLow, fontSize = 14.sp
+                                    )
+                                }
+                                innerTextField()
+                            },
+                        )
+                        Modifier.weight(1f)
+                    }
+                } // Last Name Field
+            }
             Column {
                 Text(
-                    text = "Email Address",
-                    color = TextSecondary
+                    text = "Email Address", color = TextSecondary
                 )
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = SurfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+                            color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -253,15 +302,12 @@ fun SignUpScreenContent(
                         value = email,
                         onValueChange = { email = it },
                         keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Next
+                            keyboardType = KeyboardType.Email, imeAction = ImeAction.Next
                         ),
                         decorationBox = { innerTextField ->
                             if (email.isEmpty()) {
                                 Text(
-                                    text = "name@example.com",
-                                    color = PrimaryLow,
-                                    fontSize = 14.sp
+                                    text = "name@example.com", color = PrimaryLow, fontSize = 14.sp
                                 )
                             }
                             innerTextField()
@@ -278,8 +324,7 @@ fun SignUpScreenContent(
                     modifier = Modifier
                         .fillMaxWidth()
                         .background(
-                            color = SurfaceContainer,
-                            shape = RoundedCornerShape(12.dp)
+                            color = SurfaceContainer, shape = RoundedCornerShape(12.dp)
                         )
                         .padding(horizontal = 16.dp, vertical = 16.dp),
                     verticalAlignment = Alignment.CenterVertically
@@ -328,8 +373,7 @@ fun SignUpScreenContent(
                             color = if (isChecked) Primary else SurfaceContainer,
                             shape = RoundedCornerShape(6.dp)
                         )
-                        .clickable { isChecked = !isChecked },
-                    contentAlignment = Alignment.Center
+                        .clickable { isChecked = !isChecked }, contentAlignment = Alignment.Center
                 ) {
                     if (isChecked) {
                         Icon(
@@ -352,19 +396,14 @@ fun SignUpScreenContent(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(
-                        color = Primary,
-                        shape = RoundedCornerShape(12.dp)
+                        color = Primary, shape = RoundedCornerShape(12.dp)
                     )
-                    .clickable {
-                        onSignUpButtonClick()
+                    .clickable(enabled = isFormValid) {
+                        onSignUpButtonClick(firstName, lastName, email, password)
                     }
-                    .padding(10.dp),
-                horizontalArrangement = Arrangement.spacedBy(
-                    10.dp,
-                    Alignment.CenterHorizontally
-                ),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+                    .padding(10.dp), horizontalArrangement = Arrangement.spacedBy(
+                10.dp, Alignment.CenterHorizontally
+            ), verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = "Sign up".uppercase(),
                     color = PrimaryDark,
@@ -378,23 +417,39 @@ fun SignUpScreenContent(
                     modifier = Modifier.size(24.dp)
                 )
             }
+            when (authState) {
+                is AuthState.Loading -> {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.CenterHorizontally), color = Primary
+                    )
+                }
+
+                is AuthState.Error -> {
+                    Text(
+                        text = authState.message,
+                        color = Color.Red,
+                        modifier = Modifier
+                            .padding(top = 40.dp)
+                            .align(Alignment.CenterHorizontally)
+                    )
+                }
+
+                else -> {}
+            }
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 Text(
-                    text = "Already have an account?",
-                    color = PrimaryLow,
-                    fontSize = 14.sp
+                    text = "Already have an account?", color = PrimaryLow, fontSize = 14.sp
                 )
                 Text(
                     text = "Sign In",
                     color = Primary,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.clickable { onSignInButtonClick() }
-                )
+                    modifier = Modifier.clickable { onSignInButtonClick() })
             }
         }
     }
@@ -404,8 +459,9 @@ fun SignUpScreenContent(
 @Composable
 fun PreviewSignUpScreenContent() {
     SignUpScreenContent(
+        authState = AuthState.Idle,
         onBackButtonClick = {},
         onSignInButtonClick = {},
-        onSignUpButtonClick = {},
+        onSignUpButtonClick = { _, _, _, _ -> },
     )
 }

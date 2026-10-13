@@ -76,14 +76,16 @@ fun TaskItNavGraph(
             composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onSignInButtonClick = { navActions.navigateToSignIn() }) }
             composable(TaskItDestinations.SIGN_IN_ROUTE) {
                 SignInScreen(
+                    onAuthSuccess = { navActions.navigateToTasks() },
+                    onBackButtonClick = { navController.popBackStack() },
                     onSignUpButtonClick = { navActions.navigateToSignUp() },
                 )
             }
             composable(TaskItDestinations.SIGN_UP_ROUTE) {
                 SignUpScreen(
+                    onAuthSuccess = { navActions.navigateToTasks() },
                     onBackButtonClick = { navController.popBackStack() },
                     onSignInButtonClick = { navActions.navigateToSignIn() },
-                    onSignUpButtonClick = { navActions.navigateToTasks() }
                 )
             }
             composable(TaskItDestinations.NEW_TASK_ROUTE) {
