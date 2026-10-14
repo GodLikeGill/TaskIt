@@ -38,7 +38,6 @@ class AuthViewModel @Inject constructor(
     private fun executeAuth(block: suspend () -> Result<User?>) {
         viewModelScope.launch {
             _authState.value = AuthState.Loading
-
             block().onSuccess { user ->
                     _authState.value = if (user != null) {
                         AuthState.Success(user)

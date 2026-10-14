@@ -73,7 +73,10 @@ fun TaskItNavGraph(
             composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() }) }
             composable(TaskItDestinations.UPCOMING_ROUTE) { UpcomingScreen() }
             composable(TaskItDestinations.SEARCH_ROUTE) { SearchScreen() }
-            composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(onSignInButtonClick = { navActions.navigateToSignIn() }) }
+            composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(
+                onLogoutButtonClick = { navActions.navigateToAuth() },
+                onSignInButtonClick = { navActions.navigateToSignIn() })
+            }
             composable(TaskItDestinations.SIGN_IN_ROUTE) {
                 SignInScreen(
                     onAuthSuccess = { navActions.navigateToTasks() },
