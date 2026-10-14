@@ -42,18 +42,18 @@ import com.godlike.taskit.util.SettingsTopAppBar
 
 @Composable
 fun SettingsScreen(
-    onLogoutButtonClick: () -> Unit,
     onSignInButtonClick: () -> Unit,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
     val authState by settingsViewModel.authState.collectAsStateWithLifecycle()
+    val unsyncedCount by settingsViewModel.unsyncedCount.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) { settingsViewModel.currentUser() }
 
     SettingsScreenContent(
         authState = authState,
         onLogoutButtonClick = {
-            onLogoutButtonClick()
+            settingsViewModel.logout(force = true)
         },
         onSignInButtonClick = onSignInButtonClick,
     )

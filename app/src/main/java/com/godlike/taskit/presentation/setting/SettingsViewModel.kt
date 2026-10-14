@@ -55,4 +55,6 @@ class SettingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun dismissLogoutWarning() { _unsyncedCount.value = null }
 }
