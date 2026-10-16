@@ -23,6 +23,7 @@ import com.godlike.taskit.presentation.auth.SignInScreen
 import com.godlike.taskit.presentation.auth.SignUpScreen
 import com.godlike.taskit.presentation.search.SearchScreen
 import com.godlike.taskit.presentation.setting.SettingsScreen
+import com.godlike.taskit.presentation.taskDetail.TaskDetailScreen
 import com.godlike.taskit.presentation.tasks.NewTaskScreen
 import com.godlike.taskit.presentation.tasks.TasksScreen
 import com.godlike.taskit.presentation.tasks.TasksViewModel
@@ -70,7 +71,12 @@ fun TaskItNavGraph(
             startDestination = startDestination,
             modifier = Modifier.padding(innerPadding),
         ) {
-            composable(TaskItDestinations.TASKS_ROUTE) { TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() }) }
+            composable(TaskItDestinations.TASKS_ROUTE) {
+                TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() })
+            }
+            composable(TaskItDestinations.TASK_DETAIL_ROUTE) {
+                TaskDetailScreen(onBackButtonClick = { navController.popBackStack() })
+            }
             composable(TaskItDestinations.UPCOMING_ROUTE) { UpcomingScreen() }
             composable(TaskItDestinations.SEARCH_ROUTE) { SearchScreen() }
             composable(TaskItDestinations.SETTINGS_ROUTE) { SettingsScreen(

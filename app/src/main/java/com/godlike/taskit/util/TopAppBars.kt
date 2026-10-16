@@ -222,8 +222,6 @@ fun SearchTopAppBar() {
     }
 }
 
-
-
 @Composable
 fun SettingsTopAppBar() {
     Row(
@@ -322,6 +320,57 @@ fun SignInTopAppBar(onBackButtonPress: () -> Unit) {
     }
 }
 
+@Composable
+fun TaskDetailTopAppBar(onBackButtonPress: () -> Unit) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(5.dp)
+    ) {
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = { onBackButtonPress() }),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Close,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+        Image(
+            painter = painterResource(R.drawable.taskit_logo),
+            contentDescription = "logo",
+            modifier = Modifier.size(40.dp)
+        )
+        Text(
+            text = stringResource(R.string.task_details),
+            fontSize = 20.sp,
+            color = TextPrimary,
+            fontFamily = InterFontFamily,
+            fontWeight = FontWeight.SemiBold,
+            modifier = Modifier.weight(1f)
+        )
+        Box(
+            Modifier
+                .size(32.dp)
+                .clip(CircleShape)
+                .clickable(onClick = {}),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Filled.AccountCircle,
+                contentDescription = "",
+                tint = TextPrimary,
+                modifier = Modifier.fillMaxSize()
+            )
+        }
+    }
+}
+
 @Preview
 @Composable
 fun PreviewTasksTopAppBar() {
@@ -356,4 +405,10 @@ fun PreviewSettingsTopAppBar() {
 @Composable
 fun PreviewSignInTopAppBar() {
     SignInTopAppBar {}
+}
+
+@Preview
+@Composable
+fun PreviewTaskDetailTopAppBar() {
+    TaskDetailTopAppBar{}
 }
