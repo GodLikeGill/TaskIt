@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.godlike.taskit.nav.TaskItNavGraph
 import com.godlike.taskit.ui.theme.TaskItTheme
 import dagger.hilt.android.AndroidEntryPoint
 

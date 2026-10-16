@@ -5,14 +5,14 @@ import com.godlike.taskit.data.mapper.toEntity
 import com.godlike.taskit.data.source.local.TaskDao
 import com.godlike.taskit.data.source.local.entity.SyncState
 import com.godlike.taskit.data.source.local.entity.TaskEntity
-import com.godlike.taskit.data.source.network.FirebaseDataSource
+import com.godlike.taskit.data.source.network.FirebaseTaskDataSource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 import kotlin.coroutines.cancellation.CancellationException
 
 class SyncManager @Inject constructor(
     private val local: TaskDao,
-    private val remote: FirebaseDataSource
+    private val remote: FirebaseTaskDataSource
 ) {
     suspend fun pushPending(uid: String) {
         local.getBySyncState(SyncState.PENDING).forEach { task ->

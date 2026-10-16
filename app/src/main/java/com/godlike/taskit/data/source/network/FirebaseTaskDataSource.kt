@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
-class FirebaseDataSource(
+class FirebaseTaskDataSource(
     private val firestore: FirebaseFirestore
 ) {
     // users/{uid}/tasks/{taskId}

@@ -2,6 +2,7 @@ package com.godlike.taskit.data.sync
 
 import android.util.Log
 import com.godlike.taskit.data.repository.AuthRepository
+import com.godlike.taskit.data.repository.UserRepository
 import com.godlike.taskit.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -17,6 +18,7 @@ import kotlin.coroutines.cancellation.CancellationException
 class SyncCoordinator @Inject constructor(
     private val authRepository: AuthRepository,
     private val syncManager: SyncManager,
+    private val userRepository: UserRepository,
     @param:ApplicationScope private val scope: CoroutineScope,
 ) {
     fun start() {
@@ -26,6 +28,7 @@ class SyncCoordinator @Inject constructor(
                 .collectLatest { user ->
                     if (user == null) return@collectLatest
 
+                    runSafely { userRepository.refreshUser(user.uid) }
                     runSafely { syncManager.sync(user.uid) }
 
                     syncManager.observePending()

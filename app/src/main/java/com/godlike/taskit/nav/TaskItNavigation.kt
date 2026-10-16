@@ -1,22 +1,22 @@
-package com.godlike.taskit
+package com.godlike.taskit.nav
 
 import androidx.navigation.NavHostController
-import com.godlike.taskit.TaskItDestinations.AUTH_ROUTE
-import com.godlike.taskit.TaskItDestinations.NEW_TASK_ROUTE
-import com.godlike.taskit.TaskItDestinations.SEARCH_ROUTE
-import com.godlike.taskit.TaskItDestinations.SETTINGS_ROUTE
-import com.godlike.taskit.TaskItDestinations.SIGN_IN_ROUTE
-import com.godlike.taskit.TaskItDestinations.SIGN_UP_ROUTE
-import com.godlike.taskit.TaskItDestinations.TASKS_ROUTE
-import com.godlike.taskit.TaskItDestinations.UPCOMING_ROUTE
-import com.godlike.taskit.TaskItScreens.AUTH_SCREEN
-import com.godlike.taskit.TaskItScreens.NEW_TASK_SCREEN
-import com.godlike.taskit.TaskItScreens.SEARCH_SCREEN
-import com.godlike.taskit.TaskItScreens.SETTINGS_SCREEN
-import com.godlike.taskit.TaskItScreens.SIGN_IN_SCREEN
-import com.godlike.taskit.TaskItScreens.SIGN_UP_SCREEN
-import com.godlike.taskit.TaskItScreens.TASKS_SCREEN
-import com.godlike.taskit.TaskItScreens.UPCOMING_SCREEN
+import com.godlike.taskit.nav.TaskItDestinations.AUTH_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.NEW_TASK_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.SEARCH_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.SETTINGS_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.SIGN_IN_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.SIGN_UP_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.TASKS_ROUTE
+import com.godlike.taskit.nav.TaskItDestinations.UPCOMING_ROUTE
+import com.godlike.taskit.nav.TaskItScreens.AUTH_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.NEW_TASK_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.SEARCH_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.SETTINGS_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.SIGN_IN_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.SIGN_UP_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.TASKS_SCREEN
+import com.godlike.taskit.nav.TaskItScreens.UPCOMING_SCREEN
 
 /**
  * Screens used in [TaskItDestinations]

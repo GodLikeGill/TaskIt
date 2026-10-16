@@ -13,11 +13,9 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CheckCircleOutline
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.godlike.taskit.R
-import com.godlike.taskit.presentation.auth.AuthState
+import com.godlike.taskit.domain.model.User
 import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.Primary
 import com.godlike.taskit.ui.theme.PrimaryLow
@@ -45,23 +43,18 @@ fun SettingsScreen(
     onSignInButtonClick: () -> Unit,
     settingsViewModel: SettingsViewModel = hiltViewModel()
 ) {
-    val authState by settingsViewModel.authState.collectAsStateWithLifecycle()
-    val unsyncedCount by settingsViewModel.unsyncedCount.collectAsStateWithLifecycle()
-
-    LaunchedEffect(Unit) { settingsViewModel.currentUser() }
+    val user by settingsViewModel.user.collectAsStateWithLifecycle()
 
     SettingsScreenContent(
-        authState = authState,
-        onLogoutButtonClick = {
-            settingsViewModel.logout(force = true)
-        },
+        user = user,
+        onLogoutButtonClick = { settingsViewModel.logout(force = true) },
         onSignInButtonClick = onSignInButtonClick,
     )
 }
 
 @Composable
 fun SettingsScreenContent(
-    authState: AuthState,
+    user: User?,
     onLogoutButtonClick: () -> Unit,
     onSignInButtonClick: () -> Unit,
 ) {
@@ -82,30 +75,15 @@ fun SettingsScreenContent(
                     color = Primary
                 )
             }
-            when(authState) {
-                is AuthState.Loading -> {
-                    CircularProgressIndicator(color = Primary)
-                }
-                is AuthState.Error -> {
-                    UserProfileComponent(
-                        onSignInButtonClick,
-                        status = authState.message
-                    )
-                }
-                is AuthState.Idle -> {
-                    UserProfileComponent(
-                        onSignInButtonClick
-                    )
-                }
-                is AuthState.Success -> {
-                    val user = authState.user
-                    UserProfileComponent(
-                        onLogoutButtonClick,
-                        name = user.fullName,
-                        email = user.email,
-                        buttonText = "Logout"
-                    )
-                }
+            if (user == null) {
+                UserProfileComponent(onSignInButtonClick)
+            } else {
+                UserProfileComponent(
+                    onLogoutButtonClick,
+                    name = user.fullName,
+                    email = user.email,
+                    buttonText = "Logout"
+                )
             }
         }
     }
@@ -188,7 +166,7 @@ fun UserProfileComponent(
 @Composable
 fun PreviewSettingsScreen() {
     SettingsScreenContent(
-        authState = AuthState.Idle,
+        user = null,
         onLogoutButtonClick = {},
         onSignInButtonClick = {},
     )

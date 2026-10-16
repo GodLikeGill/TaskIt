@@ -5,7 +5,7 @@ import com.godlike.taskit.data.mapper.toEntity
 import com.godlike.taskit.data.source.local.TaskDao
 import com.godlike.taskit.data.source.local.entity.SyncState
 import com.godlike.taskit.data.source.local.entity.TaskEntity
-import com.godlike.taskit.data.source.network.FirebaseDataSource
+import com.godlike.taskit.data.source.network.FirebaseTaskDataSource
 import com.godlike.taskit.data.source.network.dto.TaskDto
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -22,7 +22,7 @@ import org.junit.Test
 class SyncManagerTest {
 
     private val local = mockk<TaskDao>()
-    private val remote = mockk<FirebaseDataSource>()
+    private val remote = mockk<FirebaseTaskDataSource>()
     private lateinit var syncManager: SyncManager
 
     @Before

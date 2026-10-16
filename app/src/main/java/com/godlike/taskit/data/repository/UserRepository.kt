@@ -22,4 +22,8 @@ class UserRepository @Inject constructor(
         local.upsertUser(user.toEntity())
         remote.upsertUser(user.toDto())
     }
+
+    suspend fun refreshUser(uid: String) {
+        remote.getUser(uid)?.let { local.upsertUser(it.toDomain().toEntity()) }
+    }
 }

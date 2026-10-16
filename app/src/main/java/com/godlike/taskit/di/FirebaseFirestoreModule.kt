@@ -1,6 +1,6 @@
 package com.godlike.taskit.di
 
-import com.godlike.taskit.data.source.network.FirebaseDataSource
+import com.godlike.taskit.data.source.network.FirebaseTaskDataSource
 import com.godlike.taskit.data.source.network.FirebaseUserDataSource
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
@@ -19,8 +19,8 @@ object FirebaseFirestoreModule {
 
     @Provides
     @Singleton
-    fun provideTaskRemoteDataSource(firestore: FirebaseFirestore): FirebaseDataSource =
-        FirebaseDataSource(firestore)
+    fun provideTaskRemoteDataSource(firestore: FirebaseFirestore): FirebaseTaskDataSource =
+        FirebaseTaskDataSource(firestore)
 
     @Provides
     @Singleton

@@ -1,4 +1,4 @@
-package com.godlike.taskit
+package com.godlike.taskit.nav
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons

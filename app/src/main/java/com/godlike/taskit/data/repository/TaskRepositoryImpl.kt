@@ -4,7 +4,7 @@ import com.godlike.taskit.data.mapper.toDomain
 import com.godlike.taskit.data.mapper.toEntity
 import com.godlike.taskit.data.source.local.TaskDao
 import com.godlike.taskit.data.source.local.entity.SyncState
-import com.godlike.taskit.data.source.network.FirebaseDataSource
+import com.godlike.taskit.data.source.network.FirebaseTaskDataSource
 import com.godlike.taskit.domain.model.Task
 import com.godlike.taskit.domain.repository.TaskRepository
 import kotlinx.coroutines.flow.Flow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 class TaskRepositoryImpl @Inject constructor(
     private val local: TaskDao,
-    private val remote: FirebaseDataSource,
+    private val remote: FirebaseTaskDataSource,
 ) : TaskRepository {
 
     override fun getTasks(): Flow<List<Task>> =
