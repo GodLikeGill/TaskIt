@@ -8,18 +8,24 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.godlike.taskit.presentation.tasks.TasksViewModel
 import com.godlike.taskit.ui.theme.Primary
 import com.godlike.taskit.ui.theme.PrimaryDark
 import com.godlike.taskit.ui.theme.PrimaryLow
@@ -33,15 +39,27 @@ import com.godlike.taskit.util.TaskDetailTopAppBar
 
 @Composable
 fun TaskDetailScreen(
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    viewModel: TasksViewModel = hiltViewModel()
 ) {
-    TaskDetailScreenContent(onBackButtonClick)
+    val tasks by viewModel.tasks.collectAsState()
+
+    TaskDetailScreenContent(
+        onBackButtonClick = onBackButtonClick,
+        onDeleteTask = { viewModel.onDeleteTask(it) },
+        onCompleteTask = { taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted) }
+    )
 }
 
 @Composable
 fun TaskDetailScreenContent(
     onBackButtonClick: () -> Unit,
+    onDeleteTask: (String) -> Unit,
+    onCompleteTask: (String, Boolean) -> Unit,
 ) {
+    var title: String = "Submit Q3 Android Architecture"
+    var detail: String = "lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis"
+
     Column {
         Column(
             Modifier
@@ -61,12 +79,15 @@ fun TaskDetailScreenContent(
                     )
                     .padding(15.dp)
             ) {
-                Text(
-                    text = "Submit Q3 Android Architecture",
-                    color = TextPrimary,
-                    fontFamily = Roboto,
-                    fontSize = 24.sp,
-                    fontWeight = FontWeight.Bold
+                BasicTextField(
+                    value = title,
+                    onValueChange = { title = it },
+                    textStyle = TextStyle(
+                        color = TextPrimary,
+                        fontSize = 24.sp,
+                        fontFamily = Roboto,
+                        fontWeight = FontWeight.Bold
+                    )
                 )
             }
             Column(
@@ -84,12 +105,15 @@ fun TaskDetailScreenContent(
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
                 )
-                Text(
-                    text = "lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis",
-                    color = TextSecondary,
-                    fontFamily = Roboto,
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.Medium
+                BasicTextField(
+                    value = detail,
+                    onValueChange = { detail = it },
+                    textStyle = TextStyle(
+                        color = TextSecondary,
+                        fontSize = 16.sp,
+                        fontFamily = Roboto,
+                        fontWeight = FontWeight.Medium
+                    )
                 )
             }
         }
@@ -152,5 +176,9 @@ fun TaskDetailScreenContent(
 @Preview
 @Composable
 fun PreviewTaskDetailScreenContent() {
-    TaskDetailScreenContent(onBackButtonClick = {})
+    TaskDetailScreenContent(
+        onBackButtonClick = {},
+        onDeleteTask = {},
+        onCompleteTask = { _, _ -> },
+    )
 }
