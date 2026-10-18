@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class UserRepository @Inject constructor(
+class UserRepositoryImpl @Inject constructor(
     private val local: UserDao,
     private val remote: FirebaseUserDataSource
 ){

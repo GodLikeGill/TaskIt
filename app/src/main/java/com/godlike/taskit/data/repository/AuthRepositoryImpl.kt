@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(
+class AuthRepositoryImpl @Inject constructor(
     private val authDataSource: FirebaseAuthDataSource
 ) {
     fun observeUser(): Flow<User?> = authDataSource.observeCurrentUser().map { firebaseUser ->

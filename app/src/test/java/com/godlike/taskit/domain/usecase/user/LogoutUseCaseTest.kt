@@ -1,6 +1,6 @@
 package com.godlike.taskit.domain.usecase.user
 
-import com.godlike.taskit.data.repository.AuthRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
 import com.godlike.taskit.data.source.local.LocalDataWiper
 import com.godlike.taskit.data.sync.SyncManager
 import com.godlike.taskit.domain.model.User
@@ -16,7 +16,7 @@ import org.junit.Test
 
 class LogoutUseCaseTest {
 
-    private val authRepository = mockk<AuthRepository>()
+    private val authRepository = mockk<AuthRepositoryImpl>()
     private val syncManager = mockk<SyncManager>()
     private val wiper = mockk<LocalDataWiper>()
     private val useCase = LogoutUseCase(authRepository, syncManager, wiper)

@@ -1,6 +1,6 @@
 package com.godlike.taskit.domain.usecase.user
 
-import com.godlike.taskit.data.repository.AuthRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
 import com.godlike.taskit.data.source.local.LocalDataWiper
 import com.godlike.taskit.data.sync.SyncManager
 import javax.inject.Inject
@@ -11,7 +11,7 @@ sealed interface LogoutResult {
 }
 
 class LogoutUseCase @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val authRepository: AuthRepositoryImpl,
     private val syncManager: SyncManager,
     private val localDataWiper: LocalDataWiper,
 ) {

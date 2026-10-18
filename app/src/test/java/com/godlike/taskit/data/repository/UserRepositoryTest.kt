@@ -20,11 +20,11 @@ class UserRepositoryTest {
 
     private val local = mockk<UserDao>()
     private val remote = mockk<FirebaseUserDataSource>()
-    private lateinit var repository: UserRepository
+    private lateinit var repository: UserRepositoryImpl
 
     @Before
     fun setup() {
-        repository = UserRepository(local, remote)
+        repository = UserRepositoryImpl(local, remote)
     }
 
     @Test

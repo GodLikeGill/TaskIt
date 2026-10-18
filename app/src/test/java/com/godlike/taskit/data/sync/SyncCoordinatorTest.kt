@@ -1,7 +1,7 @@
 package com.godlike.taskit.data.sync
 
-import com.godlike.taskit.data.repository.AuthRepository
-import com.godlike.taskit.data.repository.UserRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
+import com.godlike.taskit.data.repository.UserRepositoryImpl
 import com.godlike.taskit.data.source.local.entity.TaskEntity
 import com.godlike.taskit.domain.model.User
 import io.mockk.Runs
@@ -21,8 +21,8 @@ class SyncCoordinatorTest {
 
     @Test
     fun `pending changes are pushed while a user is logged in`() = runTest {
-        val userRepository = mockk<UserRepository>()
-        val authRepository = mockk<AuthRepository>()
+        val userRepository = mockk<UserRepositoryImpl>()
+        val authRepository = mockk<AuthRepositoryImpl>()
         val syncManager = mockk<SyncManager>()
         val task = TaskEntity(id = "1", title = "Milk")
 
@@ -48,8 +48,8 @@ class SyncCoordinatorTest {
 
     @Test
     fun `guest user triggers no profile refresh, no sync and no push`() = runTest {
-        val userRepository = mockk<UserRepository>()
-        val authRepository = mockk<AuthRepository>()
+        val userRepository = mockk<UserRepositoryImpl>()
+        val authRepository = mockk<AuthRepositoryImpl>()
         val syncManager = mockk<SyncManager>()
 
         every { authRepository.observeUser() } returns flowOf(null)
@@ -65,8 +65,8 @@ class SyncCoordinatorTest {
 
     @Test
     fun `empty pending list refreshes and syncs once but pushes nothing`() = runTest {
-        val userRepository = mockk<UserRepository>()
-        val authRepository = mockk<AuthRepository>()
+        val userRepository = mockk<UserRepositoryImpl>()
+        val authRepository = mockk<AuthRepositoryImpl>()
         val syncManager = mockk<SyncManager>()
 
         every { authRepository.observeUser() } returns flowOf(User("u1", "a@b.com"))
@@ -84,8 +84,8 @@ class SyncCoordinatorTest {
 
     @Test
     fun `profile refresh failure does not stop task sync`() = runTest {
-        val userRepository = mockk<UserRepository>()
-        val authRepository = mockk<AuthRepository>()
+        val userRepository = mockk<UserRepositoryImpl>()
+        val authRepository = mockk<AuthRepositoryImpl>()
         val syncManager = mockk<SyncManager>()
 
         every { authRepository.observeUser() } returns flowOf(User("u1", "a@b.com"))

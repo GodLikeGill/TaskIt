@@ -3,15 +3,18 @@ package com.godlike.taskit.presentation.taskDetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.outlined.CheckCircleOutline
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +61,7 @@ fun TaskDetailScreenContent(
     onCompleteTask: (String, Boolean) -> Unit,
 ) {
     var title: String = "Submit Q3 Android Architecture"
-    var detail: String = "lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis"
+    var description: String = "lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis"
 
     Column {
         Column(
@@ -106,8 +109,8 @@ fun TaskDetailScreenContent(
                     fontWeight = FontWeight.SemiBold
                 )
                 BasicTextField(
-                    value = detail,
-                    onValueChange = { detail = it },
+                    value = description,
+                    onValueChange = { description = it },
                     textStyle = TextStyle(
                         color = TextSecondary,
                         fontSize = 16.sp,
@@ -121,27 +124,38 @@ fun TaskDetailScreenContent(
             modifier = Modifier
                 .fillMaxWidth()
                 .background(color = SurfaceContainer)
-                .padding(12.dp),
+                .padding(12.dp)
+                .height(IntrinsicSize.Min),
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .clickable { }
+                    .background(color = SurfaceContainerHigh, RoundedCornerShape(10.dp))
+                    .padding(10.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = "Delete Icon",
+                    tint = Primary,
+                )
+            }
             Row(
                 modifier = Modifier
-                    .weight(0.4f)
+                    .weight(0.5f)
+                    .fillMaxHeight()
                     .clickable { }
                     .background(color = SurfaceContainerHigh, RoundedCornerShape(10.dp))
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
             ) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "Delete Icon",
-                    tint = PrimaryLow,
-                )
                 Text(
-                    text = "Delete Task",
-                    color = PrimaryLow,
+                    text = "Save",
+                    color = Primary,
                     fontFamily = Roboto,
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold
@@ -149,18 +163,14 @@ fun TaskDetailScreenContent(
             }
             Row(
                 modifier = Modifier
-                    .weight(0.6f)
+                    .weight(1f)
+                    .fillMaxHeight()
                     .clickable { }
                     .background(color = Primary, RoundedCornerShape(10.dp))
                     .padding(10.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
             ) {
-                Icon(
-                    imageVector = Icons.Outlined.CheckCircleOutline,
-                    contentDescription = "Delete Icon",
-                    tint = PrimaryDark,
-                )
                 Text(
                     text = "Complete Task",
                     color = PrimaryDark,

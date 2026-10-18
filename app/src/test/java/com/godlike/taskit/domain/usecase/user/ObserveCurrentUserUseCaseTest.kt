@@ -1,8 +1,8 @@
 package com.godlike.taskit.domain.usecase.user
 
 import app.cash.turbine.test
-import com.godlike.taskit.data.repository.AuthRepository
-import com.godlike.taskit.data.repository.UserRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
+import com.godlike.taskit.data.repository.UserRepositoryImpl
 import com.godlike.taskit.domain.model.User
 import io.mockk.every
 import io.mockk.mockk
@@ -16,8 +16,8 @@ import org.junit.Test
 
 class ObserveCurrentUserUseCaseTest {
 
-    private val authRepository = mockk<AuthRepository>()
-    private val userRepository = mockk<UserRepository>()
+    private val authRepository = mockk<AuthRepositoryImpl>()
+    private val userRepository = mockk<UserRepositoryImpl>()
     private val useCase = ObserveCurrentUserUseCase(authRepository, userRepository)
 
     private val authUser = User(uid = "u1", email = "john@gmail.com")

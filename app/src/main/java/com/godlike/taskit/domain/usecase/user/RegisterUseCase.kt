@@ -1,12 +1,12 @@
 package com.godlike.taskit.domain.usecase.user
 
-import com.godlike.taskit.data.repository.AuthRepository
-import com.godlike.taskit.data.repository.UserRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
+import com.godlike.taskit.data.repository.UserRepositoryImpl
 import com.godlike.taskit.domain.model.User
 import javax.inject.Inject
 
 class RegisterUseCase @Inject constructor(
-    private val authRepository: AuthRepository, private val userRepository: UserRepository
+    private val authRepository: AuthRepositoryImpl, private val userRepository: UserRepositoryImpl
 ) {
     suspend operator fun invoke(
         email: String, password: String, firstName: String, lastName: String

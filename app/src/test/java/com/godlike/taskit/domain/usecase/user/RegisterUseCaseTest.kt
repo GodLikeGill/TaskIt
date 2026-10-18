@@ -1,7 +1,7 @@
 package com.godlike.taskit.domain.usecase.user
 
-import com.godlike.taskit.data.repository.AuthRepository
-import com.godlike.taskit.data.repository.UserRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
+import com.godlike.taskit.data.repository.UserRepositoryImpl
 import com.godlike.taskit.domain.model.User
 import io.mockk.Runs
 import io.mockk.coEvery
@@ -15,8 +15,8 @@ import org.junit.Assert.*
 
 class RegisterUseCaseTest {
 
-    private val authRepository = mockk<AuthRepository>()
-    private val userRepository = mockk<UserRepository>()
+    private val authRepository = mockk<AuthRepositoryImpl>()
+    private val userRepository = mockk<UserRepositoryImpl>()
     private lateinit var registerUseCase : RegisterUseCase
 
     @Before

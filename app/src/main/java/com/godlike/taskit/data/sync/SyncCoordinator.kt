@@ -1,8 +1,8 @@
 package com.godlike.taskit.data.sync
 
 import android.util.Log
-import com.godlike.taskit.data.repository.AuthRepository
-import com.godlike.taskit.data.repository.UserRepository
+import com.godlike.taskit.data.repository.AuthRepositoryImpl
+import com.godlike.taskit.data.repository.UserRepositoryImpl
 import com.godlike.taskit.di.ApplicationScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
@@ -16,9 +16,9 @@ import kotlin.coroutines.cancellation.CancellationException
 
 @Singleton
 class SyncCoordinator @Inject constructor(
-    private val authRepository: AuthRepository,
+    private val authRepository: AuthRepositoryImpl,
     private val syncManager: SyncManager,
-    private val userRepository: UserRepository,
+    private val userRepository: UserRepositoryImpl,
     @param:ApplicationScope private val scope: CoroutineScope,
 ) {
     fun start() {
