@@ -19,6 +19,9 @@ class TaskRepositoryImpl @Inject constructor(
     override fun getTasks(): Flow<List<Task>> =
         local.observeAll().map { list -> list.map { it.toDomain() } }
 
+    override fun getTask(taskId: String): Flow<Task?> =
+        local.observeById(taskId).map { it?.toDomain() }
+
     override suspend fun addTask(task: Task) {
         local.upsertTask(task.toEntity().copy(
             updatedAt = System.currentTimeMillis(),

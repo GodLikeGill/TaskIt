@@ -7,8 +7,8 @@ import com.godlike.taskit.nav.TaskItDestinations.SETTINGS_ROUTE
 import com.godlike.taskit.nav.TaskItDestinations.SIGN_IN_ROUTE
 import com.godlike.taskit.nav.TaskItDestinations.SIGN_UP_ROUTE
 import com.godlike.taskit.nav.TaskItDestinations.TASKS_ROUTE
-import com.godlike.taskit.nav.TaskItDestinations.TASK_DETAIL_ROUTE
 import com.godlike.taskit.nav.TaskItDestinations.UPCOMING_ROUTE
+import com.godlike.taskit.nav.TaskItDestinationsArgs.TASK_ID_ARG
 import com.godlike.taskit.nav.TaskItScreens.NEW_TASK_SCREEN
 import com.godlike.taskit.nav.TaskItScreens.SEARCH_SCREEN
 import com.godlike.taskit.nav.TaskItScreens.SETTINGS_SCREEN
@@ -32,6 +32,9 @@ private object TaskItScreens {
     const val TASK_DETAIL_SCREEN = "taskDetail"
 }
 
+object TaskItDestinationsArgs {
+    const val TASK_ID_ARG = "taskId"
+}
 
 /**
  * Destinations used in [TaskItNavGraph]
@@ -44,7 +47,7 @@ object TaskItDestinations {
     const val SETTINGS_ROUTE = SETTINGS_SCREEN
     const val SIGN_IN_ROUTE = SIGN_IN_SCREEN
     const val SIGN_UP_ROUTE = SIGN_UP_SCREEN
-    const val TASK_DETAIL_ROUTE = TASK_DETAIL_SCREEN
+    const val TASK_DETAIL_ROUTE = "$TASK_DETAIL_SCREEN/{$TASK_ID_ARG}"
 }
 
 /**
@@ -72,7 +75,7 @@ class TaskItNavigationActions(private val navController: NavHostController) {
     fun navigateToSignUp() {
         navController.navigate(SIGN_UP_ROUTE)
     }
-    fun navigateToTaskDetail() {
-        navController.navigate(TASK_DETAIL_ROUTE)
+    fun navigateToTaskDetail(taskId: String) {
+        navController.navigate("$TASK_DETAIL_SCREEN/$taskId")
     }
 }

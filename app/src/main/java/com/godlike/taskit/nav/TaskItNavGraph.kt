@@ -15,10 +15,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.godlike.taskit.presentation.auth.SignInScreen
 import com.godlike.taskit.presentation.auth.SignUpScreen
 import com.godlike.taskit.presentation.search.SearchScreen
@@ -72,9 +74,15 @@ fun TaskItNavGraph(
             modifier = Modifier.padding(innerPadding),
         ) {
             composable(TaskItDestinations.TASKS_ROUTE) {
-                TasksScreen(onNewTaskButtonClick = { navActions.navigateToNewTask() })
+                TasksScreen(
+                    onTaskClick = { navActions.navigateToTaskDetail(taskId = it)},
+                    onNewTaskButtonClick = { navActions.navigateToNewTask() }
+                )
             }
-            composable(TaskItDestinations.TASK_DETAIL_ROUTE) {
+            composable(
+                route = TaskItDestinations.TASK_DETAIL_ROUTE,
+                arguments = listOf(navArgument("taskId") { type = NavType.StringType })
+            ) {
                 TaskDetailScreen(onBackButtonClick = { navController.popBackStack() })
             }
             composable(TaskItDestinations.UPCOMING_ROUTE) { UpcomingScreen() }

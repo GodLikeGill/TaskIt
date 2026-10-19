@@ -18,7 +18,6 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -28,7 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.godlike.taskit.presentation.tasks.TasksViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.godlike.taskit.domain.model.Task
 import com.godlike.taskit.ui.theme.Primary
 import com.godlike.taskit.ui.theme.PrimaryDark
 import com.godlike.taskit.ui.theme.PrimaryLow
@@ -43,25 +43,27 @@ import com.godlike.taskit.util.TaskDetailTopAppBar
 @Composable
 fun TaskDetailScreen(
     onBackButtonClick: () -> Unit,
-    viewModel: TasksViewModel = hiltViewModel()
+    viewModel: TaskDetailViewModel = hiltViewModel()
 ) {
-    val tasks by viewModel.tasks.collectAsState()
+    val task by viewModel.task.collectAsStateWithLifecycle()
 
     TaskDetailScreenContent(
+        task = task,
         onBackButtonClick = onBackButtonClick,
-        onDeleteTask = { viewModel.onDeleteTask(it) },
-        onCompleteTask = { taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted) }
+        onDeleteTask = { /*viewModel.onDeleteTask(it)*/ },
+        onCompleteTask = { _,_ ->/*taskId, isCompleted -> viewModel.onCompleteTask(taskId, isCompleted)*/ }
     )
 }
 
 @Composable
 fun TaskDetailScreenContent(
+    task: Task?,
     onBackButtonClick: () -> Unit,
     onDeleteTask: (String) -> Unit,
     onCompleteTask: (String, Boolean) -> Unit,
 ) {
-    var title: String = "Submit Q3 Android Architecture"
-    var description: String = "lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis"
+    var title: String = task?.title ?: "Submit Q3 Android Architecture"
+    var description: String = task?.description ?: "Task1" //lorem ipsum dolor sit amet consectetur adipiscing elit cillum pariatur sed libero nisi mollit id veniam labore nulla culpa voluptatum mollit occaecat autem est tempore dolores labore occaecat incididunt lorem dolor molestias laborum placeat nobis"
 
     Column {
         Column(
@@ -187,6 +189,7 @@ fun TaskDetailScreenContent(
 @Composable
 fun PreviewTaskDetailScreenContent() {
     TaskDetailScreenContent(
+        task = null,
         onBackButtonClick = {},
         onDeleteTask = {},
         onCompleteTask = { _, _ -> },

@@ -6,6 +6,7 @@ import com.godlike.taskit.data.mapper.toEntity
 import com.godlike.taskit.data.source.local.UserDao
 import com.godlike.taskit.data.source.network.FirebaseUserDataSource
 import com.godlike.taskit.domain.model.User
+import com.godlike.taskit.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -13,17 +14,18 @@ import javax.inject.Inject
 class UserRepositoryImpl @Inject constructor(
     private val local: UserDao,
     private val remote: FirebaseUserDataSource
-){
-    fun observeUser(uid: String): Flow<User?> {
+): UserRepository {
+
+    override fun observeUser(uid: String): Flow<User?> {
         return local.observeUser(uid = uid).map { entity -> entity?.toDomain() }
     }
 
-    suspend fun saveUser(user: User) {
+    override suspend fun saveUser(user: User) {
         local.upsertUser(user.toEntity())
         remote.upsertUser(user.toDto())
     }
 
-    suspend fun refreshUser(uid: String) {
+    override suspend fun refreshUser(uid: String) {
         remote.getUser(uid)?.let { local.upsertUser(it.toDomain().toEntity()) }
     }
 }

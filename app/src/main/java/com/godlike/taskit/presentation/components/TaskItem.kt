@@ -37,6 +37,7 @@ import com.godlike.taskit.ui.theme.Urgent
 @Composable
 fun TaskItem(
     task: Task,
+    onTaskClick: () -> Unit,
     onDeleteTask: (Task) -> Unit,
     onCheckedChange: (Boolean) -> Unit,
 ) {
@@ -44,6 +45,7 @@ fun TaskItem(
         modifier = Modifier
             .clip(RoundedCornerShape(30.dp))
             .background(SurfaceContainer)
+            .clickable{ onTaskClick() }
             .padding(20.dp),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -127,5 +129,6 @@ fun PreviewTaskItem() {
         ),
         onDeleteTask = {},
         onCheckedChange = {},
+        onTaskClick = {}
     )
 }
