@@ -51,12 +51,16 @@ fun TaskItNavGraph(
         BottomNavItem(TaskItDestinations.SEARCH_ROUTE, "Search", Icons.Outlined.Search),
         BottomNavItem(TaskItDestinations.SETTINGS_ROUTE, "Settings", Icons.Outlined.Settings),
     )
+
+    val selectedRoute = items.firstOrNull { item -> currentDestination?.hierarchy?.any { it.route == item.route } == true }?.route
+
     Scaffold(
-        containerColor = Surface, bottomBar = {
-            if (currentDestination?.route != TaskItDestinations.NEW_TASK_ROUTE) {
+        containerColor = Surface,
+        bottomBar = {
+            if (selectedRoute != null) {
                 TaskItBottomNav(
                     items = items,
-                    selectedRoute = items.firstOrNull { item -> currentDestination?.hierarchy?.any { it.route == item.route } == true }?.route,
+                    selectedRoute = selectedRoute,
                     onItemClick = { item ->
                         navController.navigate(item.route) {
                             popUpTo(navController.graph.findStartDestination().id) {
