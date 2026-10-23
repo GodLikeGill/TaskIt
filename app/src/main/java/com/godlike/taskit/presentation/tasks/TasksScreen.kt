@@ -1,11 +1,11 @@
 package com.godlike.taskit.presentation.tasks
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,8 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +30,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,7 +45,6 @@ import com.godlike.taskit.ui.theme.Roboto
 import com.godlike.taskit.ui.theme.Surface
 import com.godlike.taskit.ui.theme.SurfaceContainer
 import com.godlike.taskit.ui.theme.SurfaceContainerHigh
-import com.godlike.taskit.ui.theme.TextPrimary
 import com.godlike.taskit.ui.theme.TextSecondary
 import com.godlike.taskit.util.TasksTopAppBar
 import java.util.Calendar
@@ -56,20 +52,21 @@ import java.util.Locale
 
 data class DateItem(
     val dayNumber: Int,
-    val dayName: String
+    val dayName: String,
+    val isToday: Boolean = false
 )
 
 fun getDateList(): List<DateItem> {
     val calendar = Calendar.getInstance()
-    return (0 until 30).map {
-        calendar.add(Calendar.DAY_OF_MONTH, if (it == 0) 0 else 1)
+    calendar.add(Calendar.DAY_OF_MONTH, -2)
+    return (0 until 18).map { index ->
+        if (index > 0) calendar.add(Calendar.DAY_OF_MONTH, 1)
         DateItem(
             dayNumber = calendar.get(Calendar.DAY_OF_MONTH),
             dayName = calendar.getDisplayName(
-                Calendar.DAY_OF_WEEK,
-                Calendar.SHORT,
-                Locale.getDefault()
-            ) ?: ""
+                Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault()
+            ) ?: "",
+            isToday = index == 2
         )
     }
 }
@@ -98,7 +95,7 @@ fun TasksScreenContent(
     onNewTaskButtonClick: () -> Unit,
 ) {
     val dates = remember { getDateList() }
-    var selectedIndex by remember { mutableIntStateOf(0) }
+    var dateSelectedIndex by remember { mutableIntStateOf(dates.indexOfFirst { it.isToday }.coerceAtLeast(0)) }
     Box(
         Modifier
             .fillMaxSize()
@@ -111,16 +108,17 @@ fun TasksScreenContent(
         ) {
             TasksTopAppBar()
             LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(20.dp)
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 itemsIndexed(dates) { index, date ->
-                    val isSelected = index == selectedIndex
+                    val isSelected = index == dateSelectedIndex
                     Column(
                         modifier = Modifier
                             .clip(RoundedCornerShape(10.dp))
                             .background(
                                 if (isSelected) PrimaryPressed else SurfaceContainer,
                             )
+                            .clickable { dateSelectedIndex = index }
                             .padding(10.dp),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -160,42 +158,31 @@ fun TasksScreenContent(
                 }
             }
         }
-        Button(
-            onClick = { onNewTaskButtonClick() },
+        Row(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
-                .shadow(
-                    elevation = 20.dp,
-                    shape = RoundedCornerShape(50),
-                    clip = false,
-                    ambientColor = Primary,
-                    spotColor = Primary,
-                ),
-            shape = RoundedCornerShape(50.dp),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Primary,
-                contentColor = TextPrimary
-            ),
-            contentPadding = PaddingValues(vertical = 15.dp, horizontal = 15.dp)
+                .clickable { onNewTaskButtonClick() }
+                .background(
+                    shape = RoundedCornerShape(50.dp),
+                    color = Primary
+                )
+                .padding(horizontal = 10.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(10.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Add,
-                    contentDescription = "add",
-                    tint = Surface,
-                    modifier = Modifier.size(24.dp)
-                )
-                Text(
-                    text = "New Task",
-                    color = Surface,
-                    fontSize = 15.sp,
-                    fontFamily = Roboto,
-                    fontWeight = FontWeight.SemiBold
-                )
-            }
+            Icon(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "add",
+                tint = Surface,
+                modifier = Modifier.size(24.dp)
+            )
+            Text(
+                text = "New Task",
+                color = Surface,
+                fontSize = 15.sp,
+                fontFamily = Roboto,
+                fontWeight = FontWeight.SemiBold
+            )
         }
     }
 }

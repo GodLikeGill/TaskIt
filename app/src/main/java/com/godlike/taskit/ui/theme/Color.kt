@@ -35,8 +35,8 @@ val PrimaryPressed = Color(0xFFE15256)
 val PrimaryLow = Color(0xFFFFB3B1)
 val PrimaryDark = Color(0xFF670011)
 
-val Secondary = Color(0xFF0566D9)
-val SecondaryText = Color(0xFFADC6FF)
+val WorkContainer = Color(0xFF0566D9)
+val WorkText = Color(0xFFADC6FF)
 
 val Success = Color(0xFF22C55E)
 val Urgent = Color(0xFFEF4444)
@@ -50,6 +50,7 @@ val PersonalText = Color(0xFFE9DDFF)
 
 val TextPrimary = Color(0xFFF5F7FA)
 val TextSecondary = Color(0xFF9096A9)
+val TextTertiary = Color(0xFFA88988)
 val TextDisabled = Color(0xFF4E5366)
 
 val Border = Color(0xFF2A2E3D)

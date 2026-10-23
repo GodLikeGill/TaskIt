@@ -27,12 +27,12 @@ import com.godlike.taskit.ui.theme.InterFontFamily
 import com.godlike.taskit.ui.theme.PersonalContainer
 import com.godlike.taskit.ui.theme.PersonalText
 import com.godlike.taskit.ui.theme.Primary
-import com.godlike.taskit.ui.theme.Secondary
-import com.godlike.taskit.ui.theme.SecondaryText
 import com.godlike.taskit.ui.theme.SurfaceContainer
 import com.godlike.taskit.ui.theme.SurfaceVariant
 import com.godlike.taskit.ui.theme.TextPrimary
 import com.godlike.taskit.ui.theme.Urgent
+import com.godlike.taskit.ui.theme.WorkContainer
+import com.godlike.taskit.ui.theme.WorkText
 
 @Composable
 fun TaskItem(
@@ -69,12 +69,12 @@ fun TaskItem(
                 Row(
                     modifier = Modifier
                         .clip(RoundedCornerShape(15.dp))
-                        .background(color = Secondary)
+                        .background(color = WorkContainer)
                         .padding(vertical = 5.dp, horizontal = 10.dp)
                 ) {
                     Text(
                         text = "Work",
-                        color = SecondaryText,
+                        color = WorkText,
                         fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = InterFontFamily
